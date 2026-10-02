@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0b1114">
+    <meta name="description" content="CCTV를 관찰하고, 문장으로 요원을 지휘하고, 자료의 근거를 검증하세요. 10분 안에 기밀 USB를 회수하는 AI 관제 지휘 게임 프로토타입.">
+    <title>AI 관제 지휘 · DATA LEAK</title>
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">본문으로 이동</a>
+    <header class="site-header page-width">
+      <a class="brand" href="./" aria-label="AI 관제 지휘 홈">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="brand-type">DATA LEAK<span>AI 관제 지휘</span></span>
+      </a>
+      <nav aria-label="주요 메뉴">
+        <a href="#briefing">작전 브리핑</a>
+        <a href="#captures">현장 기록</a>
+        <a class="source-link" href="https://github.com/cheonyeon0316/ai-control-room-game" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero page-width" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> OPS / 01 <span class="eyebrow-divider">/</span> REMOTE OPERATIONS</p>
+          <h1 id="hero-title">말로 지휘하고,<br><span>근거로 판단하세요.</span></h1>
+          <p class="hero-description">당신은 관제실의 지휘관입니다. CCTV로 현장을 살피고, 요원과 분석 시스템에 지시하세요. <strong>10분 안에 기밀 USB를 회수하고 탈출</strong>해야 합니다.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="./play/"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.5 16 10 6 16.5Z"/></svg> 브라우저에서 플레이 <span aria-hidden="true">↗</span></a>
+            <a class="button button-secondary" href="https://github.com/cheonyeon0316/ai-control-room-game/releases/download/v0.1.0/ControlRoom-Windows.zip"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v10m-4-4 4 4 4-4M3 13v4h14v-4"/></svg> Windows 다운로드</a>
+          </div>
+          <p class="platform-note">PC · 키보드 / 마우스 <span>한국어 명령 지원</span> <span>프로토타입 v0.1.0</span></p>
+        </div>
+        <div class="hero-console">
+          <div class="console-bar"><span><i class="status-dot" aria-hidden="true"></i> CONTROL ROOM</span><span>CAM / 01—04</span></div>
+          <a class="capture-link hero-capture" href="./assets/control-room.png" data-capture="0" aria-label="실제 관제 화면 확대">
+            <img src="./assets/control-room.png" width="1920" height="1080" alt="네 대의 CCTV 영상과 요원 상태, 작전 기록, 자연어 지시 입력창이 배치된 실제 게임 관제 화면" fetchpriority="high">
+            <span class="expand-mark" aria-hidden="true">⤢</span>
+          </a>
+          <div class="console-footer"><span>ACTUAL GAME CAPTURE</span><span>OBSERVE <i>/</i> COMMAND <i>/</i> VERIFY</span></div>
+          <div class="mission-tag"><span>MISSION OBJECTIVE</span><strong>USB 확보 → 요원 복귀</strong></div>
+        </div>
+      </section>
+
+      <div class="verification page-width" aria-label="실제 Unity 검증 결과">
+        <div class="verification-title"><span class="check-symbol" aria-hidden="true">✓</span><div><strong>실제 Unity 테스트 통과</strong><span>게임 로직과 런타임 acceptance 검증</span></div></div>
+        <div class="test-result"><strong>87<span> / 87</span></strong><span>EditMode <i>PASS</i></span></div>
+        <div class="test-result"><strong>18<span> / 18</span></strong><span>PlayMode <i>PASS</i></span></div>
+        <span class="verification-engine">UNITY 6 <span>URP</span></span>
+      </div>
+
+      <section id="briefing" class="briefing page-width section-space" aria-labelledby="briefing-title">
+        <div class="section-heading"><div><p class="eyebrow">OPERATION BRIEFING</p><h2 id="briefing-title">지휘관의 세 가지 도구</h2></div><p>화면을 보고, 지시하고,<br>돌아온 답을 확인하세요.</p></div>
+        <div class="steps">
+          <article class="step">
+            <div class="step-top"><span class="step-number">01</span><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="4" y="8" width="32" height="22" rx="2"/><path d="M15 35h10M20 30v5M8 13h6m-6 4h3m14 8h7m-4-4h4"/></svg></div>
+            <p class="step-label">OBSERVE / CCTV</p><h3>현장을 관찰하세요</h3>
+            <p>네 대의 CCTV가 시설을 보여줍니다. 화면을 클릭하면 확대되고, <strong>4분할 보기</strong>로 돌아올 수 있습니다.</p>
+          </article>
+          <article class="step">
+            <div class="step-top"><span class="step-number">02</span><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M5 8h30v23H17l-8 6v-6H5Z"/><path d="m11 15 5 4-5 4m9 0h8"/></svg></div>
+            <p class="step-label">COMMAND / FIELD AGENT</p><h3>문장으로 지시하세요</h3>
+            <p>담당자를 선택하고 지시를 입력한 뒤 <strong>Enter 또는 Send</strong>로 보냅니다. 대상이 모호하면 요원이 확인 질문을 합니다.</p>
+          </article>
+          <article class="step">
+            <div class="step-top"><span class="step-number">03</span><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M8 5h19l6 6v24H8ZM26 5v8h7"/><path d="m14 20 3 3 7-7m-10 13h13"/></svg></div>
+            <p class="step-label">VERIFY / ANALYSIS SYSTEM</p><h3>답의 근거를 확인하세요</h3>
+            <p>분석 시스템에 기록을 요청하고 출처와 시간을 비교하세요. <strong>분석 중에도 현장과 시간은 진행</strong>됩니다.</p>
+          </article>
+        </div>
+        <div class="command-examples">
+          <div class="example-label"><span class="status-dot" aria-hidden="true"></span> 이런 지시로 시작해 보세요</div>
+          <div class="example"><span>FIELD AGENT</span><p>“메인 복도로 이동해서 주변 상황 보고해”</p></div>
+          <div class="example"><span>ANALYSIS SYSTEM</span><p>“22시 이후 연구실 출입자 찾아줘”</p></div>
+        </div>
+      </section>
+
+      <section id="captures" class="captures page-width section-space" aria-labelledby="captures-title">
+        <div class="section-heading"><div><p class="eyebrow">FIELD RECORDS</p><h2 id="captures-title">실제 플레이 화면</h2></div><p class="capture-hint"><span aria-hidden="true">⤢</span> 이미지를 눌러 확대하세요</p></div>
+        <div class="capture-grid">
+          <figure class="capture-card capture-card-wide">
+            <a class="capture-link" href="./assets/control-room.png" data-capture="0" aria-label="관제 화면 이미지 확대"><img src="./assets/control-room.png" width="1920" height="1080" alt="CCTV 네 화면을 살피며 자연어 명령을 보내는 관제 화면" loading="lazy"><span class="expand-mark" aria-hidden="true">⤢</span></a>
+            <figcaption><span>01 / 관제 화면</span><p>영상·요원·기록을 한 화면에서 확인</p></figcaption>
+          </figure>
+          <figure class="capture-card">
+            <a class="capture-link" href="./assets/field-photo.png" data-capture="1" aria-label="현장 사진 이미지 확대"><img src="./assets/field-photo.png" width="640" height="360" alt="현장 요원이 촬영한 연구실의 닫힌 캐비닛 사진" loading="lazy"><span class="expand-mark" aria-hidden="true">⤢</span></a>
+            <figcaption><span>02 / 현장 사진</span><p>요원의 카메라로 촬영한 실제 증거 이미지</p></figcaption>
+          </figure>
+          <figure class="capture-card">
+            <a class="capture-link" href="./assets/mission-result.png" data-capture="2" aria-label="작전 결과 이미지 확대"><img src="./assets/mission-result.png" width="1920" height="1080" alt="작전 성공 메시지와 관찰된 명령·확인 질문·근거 요청 행동을 정리한 결과 화면" loading="lazy"><span class="expand-mark" aria-hidden="true">⤢</span></a>
+            <figcaption><span>03 / 작전 결과</span><p>미션 결과와 관찰된 지휘 행동을 돌아보기</p></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="launch-section page-width" aria-labelledby="launch-title">
+        <div class="launch-copy"><p class="eyebrow">READY TO DISPATCH</p><h2 id="launch-title">관제실에서 만나요.</h2><p>기본 규칙 해석기로 플레이할 수 있습니다.<br>별도의 AI 서비스 연결이나 API 키는 필요하지 않습니다.</p></div>
+        <a class="button button-primary" href="./play/">작전 시작 <span aria-hidden="true">→</span></a>
+      </section>
+    </main>
+
+    <footer class="site-footer page-width"><p>AI 관제 지휘 <span>/</span> DATA LEAK</p><span>PROTOTYPE · v0.1.0</span><a href="https://github.com/cheonyeon0316/ai-control-room-game" target="_blank" rel="noopener noreferrer">소스 코드 보기 <span aria-hidden="true">↗</span></a></footer>
+
+    <dialog class="lightbox" aria-labelledby="lightbox-title">
+      <div class="lightbox-toolbar"><span id="lightbox-title"></span><button class="lightbox-close" type="button" aria-label="확대 이미지 닫기">닫기 <span aria-hidden="true">×</span></button></div>
+      <div class="lightbox-stage"><button class="lightbox-prev" type="button" aria-label="이전 이미지">←</button><img class="lightbox-image" src="./assets/control-room.png" alt=""><button class="lightbox-next" type="button" aria-label="다음 이미지">→</button></div>
+      <p class="lightbox-caption"></p>
+      <div class="lightbox-bottom"><span class="lightbox-count"></span><span>← → 이동 <i>/</i> Esc 닫기</span><a class="lightbox-original" href="./assets/control-room.png" target="_blank" rel="noopener noreferrer">원본 보기 ↗</a></div>
+    </dialog>
+  </body>
+</html>

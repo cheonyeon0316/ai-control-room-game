@@ -1,0 +1,5 @@
+{
+  "name": "ControlRoom.PlayModeTests",
+  "references": ["ControlRoom.Runtime", "UnityEngine.UI"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}

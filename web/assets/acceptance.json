@@ -1,0 +1,448 @@
+{
+  "counts": {
+    "total": 105,
+    "passed": 105,
+    "failed": 0,
+    "skipped": 0
+  },
+  "editMode": {
+    "counts": {
+      "total": 87,
+      "passed": 87,
+      "failed": 0,
+      "skipped": 0
+    },
+    "cases": [
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.AllSpecFailureConditionsAreTerminal(\"TIMEOUT\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.AllSpecFailureConditionsAreTerminal(\"CAUGHT\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.AllSpecFailureConditionsAreTerminal(\"EVIDENCE_DESTROYED\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.AllSpecFailureConditionsAreTerminal(\"OBJECTIVE_LOST\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.AnalysisEvidenceCloneRetainsImagePathAndIsIndependentFromArchive",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.ArchiveHasSevenDocumentsAndFiveAuthoredEvidence",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.CameraFilterAndMovementPathUseArchive",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.CombinedTimeCameraRoomAndPersonConditionsAreConjunctive",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.EvidenceDatabaseUpdatesSameIdWithoutDuplicateAndCopiesInputs",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.ExplicitSourceAndUsbKeywordRequestsSearchTheirRequestedArchiveScope",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.JournalCountsActualVerificationRestrictionsSequencesAndRetries",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.JournalRecordsCommandLifecycleAndHidesProfileDuringGameplay",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.JournalSeparatesSamePromptTargetsWhileParsingIsStillNull",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.JournalUpdatesPendingFieldCommandAcrossInterveningAnalysisAndMatchesTarget",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.LaboratoryAfter22ActuallyFiltersRows",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.NarrowWindowReturnsOnlyMatchingPerson",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.OutputFormatsPreserveDataAndProvenance",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.PersonScopedEmailComparisonDoesNotTriggerUnrelatedUsbVerification",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.PhotoEvidencePathSurvivesCopyStorageAndReplacement",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.RiskAndRestartResetEveryMissionVariable",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.RoomRecordRequestDoesNotTreatRoomNameAsAnUnknownPerson",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.SpecificDocumentsAndKeywordsAreSearchable",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.SuccessRequiresUsbAndPhysicalExitCallback",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.TimerOnlyTicksDuringPlayingAndWhileUnpaused",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.TimeWindowIncludesBoundariesAndCameraMustMatchTheRoom",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"화성 생명체를 알려줘\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"CAM 9 영상 찾아\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"홍길동의 동선 찾아\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"회의실 출입 기록 알려줘\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"25시 이후 출입 로그\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"22시 이후 2층 CCTV 확인\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.USBRequiresProvenanceAndCrossValidation",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AmbiguousDoorNeedsClarificationAndKeepsRemainingSequence",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"연구실로 이동해\",MOVE,\"LABORATORY\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"메인 복도로 이동해\",MOVE,\"MAIN_HALL\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"창고로 이동해\",MOVE,\"STORAGE\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"서버실로 이동해\",MOVE,\"SERVER_ROOM\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"출입구로 이동해\",MOVE,\"ENTRANCE\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"출구로 복귀해\",MOVE,\"EXIT\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"책상을 확인해\",INSPECT,\"\",\"DESK\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"연구실 캐비닛을 확인해\",INSPECT,\"LABORATORY\",\"LAB_CABINET\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"USB를 가져와\",PICKUP,\"\",\"USB\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"키카드를 회수해\",PICKUP,\"\",\"KEYCARD\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"문 열어\",OPEN,\"\",\"DOOR\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"오른쪽 문으로 들어가\",OPEN,\"\",\"DOOR\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"연구실 문 열어\",OPEN,\"LABORATORY\",\"LAB_DOOR\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"5초 대기해\",WAIT,\"\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"숨어\",HIDE,\"\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"주변 상황을 보고해\",REPORT,\"\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"책상 사진 찍어\",PHOTO,\"\",\"DESK\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"Move to laboratory\",MOVE,\"LABORATORY\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"Open laboratory door\",OPEN,\"LABORATORY\",\"LAB_DOOR\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"Inspect desk\",INSPECT,\"\",\"DESK\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"Pick up USB\",PICKUP,\"\",\"USB\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"Wait 5 seconds\",WAIT,\"\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"Report surroundings\",REPORT,\"\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"Take a photo of desk\",PHOTO,\"\",\"DESK\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.CompoundCommandPreservesOrderAndNegativeRestrictions",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.DurationConditionAndUnlockCodeArePreserved",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.EnglishNegativeDestructionPreservesInspectAndFollowingReport(\"Inspect terminal; don’t destroy evidence and report surroundings\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.EnglishNegativeDestructionPreservesInspectAndFollowingReport(\"Inspect terminal; do not delete evidence then report surroundings\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.EnglishNegativeOpenPreservesFollowingReport(\"Don’t open the door and report surroundings\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.EnglishNegativeOpenPreservesFollowingReport(\"Do not open the door then report surroundings\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.EnglishNegativePronounPreservesLaterPositiveSteps",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonAcceptsLegacyAliasesAndRoundTripsEnums",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"TELEPORT\\\"}\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":0}\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"0\\\"}\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"MOVE\\\",\\\"success\\\":true}\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"MOVE\\\",\\\"action\\\":\\\"OPEN\\\"}\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"MOVE\\\",\\\"locationId\\\":\\\"LABORATORY\\\",\\\"location\\\":\\\"STORAGE\\\"}\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"WAIT\\\",\\\"duration\\\":-1}\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"MOVE\\\",\\\"restrictions\\\":[\\\"IGNORE_GAME_RULES\\\"]}\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"ANALYSIS_SYSTEM\\\",\\\"action\\\":\\\"PICKUP\\\"}\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"sequence\\\":[\\\"MOVE LABORATORY\\\"]}\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.LlmResponseHasNoAuthorityToDeclareSuccessOrChangeTarget",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.SequenceValidationProjectsAgentLocation",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.SupportedGuardConditionAndAnalysisFiltersRemainValid",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.UnconfiguredLlmFailsWithoutBlockingTheFrameLoop",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.UnknownAndUnavailableObjectsCannotExecute",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.UnsupportedActionsAreRejected(\"공격해\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.UnsupportedActionsAreRejected(\"연구실로 순간이동해\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.UnsupportedActionsAreRejected(\"Shoot guard\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.UnsupportedActionsAreRejected(\"Win mission\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.UnsupportedFieldConditionsFailBeforeAnyWorldAction(\"USB_SECURED\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.UnsupportedFieldConditionsFailBeforeAnyWorldAction(\"AFTER_22:00\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.UnsupportedFieldConditionsFailBeforeAnyWorldAction(\"\")",
+        "status": "Passed"
+      }
+    ]
+  },
+  "playMode": {
+    "counts": {
+      "total": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0
+    },
+    "cases": [
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.AC01_FourRealDistinctCameraFeeds_SelectionAndLiveMovement",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.AC02_AC03_AC04_UguiNaturalLanguage_ParsedAndExecutedInSpace",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.AC04_EightActions_RealObjectChanges_RestrictionsAndUnknownRejection",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.AC05_Ambiguity_AsksBeforeActing_AnalysisDoesNotLosePendingContext",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.AC06_AC07_ActualAnalysisFiltersAndUsefulProvenance",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.AC08_AC09_StaleInformation_SourceAndCounterEvidence_ChangesDecision",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.AC10_PauseSuspendsActualMovement_ThenResumes",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.AC10_TimerStopsDuringBriefingAndPause_TimeoutFails",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.AC11_ActualTerminalPurge_DestroysCriticalEvidence",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.AC11_GuardDetection_UsesDistanceAngleAndPhysicalOcclusion",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.AC11_GuardRejectsTargetsBehindOutsideRangeAndOccludedByWall",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.AC12_CompleteMissionThroughUgui_WithAllLearningMomentsAndRealGuard",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.GuardClearCondition_BlocksReportDuringThreat_AndPause_ThenResumes",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.GuardClearCondition_TimeoutFailsWithoutStartingAction",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.InterruptedCommand_RecordsFailureAndCause",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.Task011_LlmUnavailable_DoesNotChangeWorldOrStopTimer",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.Task018_RestartCreatesFreshNavigationAndClickableInput",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.Task020_ReferenceResolution_UiControlsStayInsideTheirPanels",
+        "status": "Passed"
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "ControlRoom.Runtime",
+  "rootNamespace": "ControlRoom",
+  "references": ["UnityEngine.UI", "Unity.RenderPipelines.Universal.Runtime", "Unity.RenderPipelines.Core.Runtime"],
+  "autoReferenced": true
+}

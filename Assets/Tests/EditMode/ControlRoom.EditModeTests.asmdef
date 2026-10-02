@@ -1,0 +1,6 @@
+{
+  "name": "ControlRoom.EditModeTests",
+  "references": ["ControlRoom.Runtime"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}

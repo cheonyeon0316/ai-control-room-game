@@ -1,0 +1,17 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Bb]uilds/
+.vs/
+*.csproj
+*.sln
+*.user
+*.pidb
+*.pdb
+*.mdb
+.env
+.env.*
+!*.example
+TestResults/
