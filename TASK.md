@@ -1650,3 +1650,7 @@ batchmode의 `ScreenCapture.CaptureScreenshot`은 실제 HUD PNG를 남기지 �
 실행 `20261002-232031`은 실제 EditMode 87/87, PlayMode 18/18 및 Windows 빌드/초기화 검사를 통과했다. WebGL 빌드와 실제 브라우저의 Briefing/CCTV/한글 표시도 확인했다. 브라우저 캡처 검토에서 새 폰트의 줄 높이로 상단 타이머가 잘리는 결함을 발견했다. SPEC §15와 AC-10의 제한시간 표시 요구에 따라 타이머 Text의 overflow를 수정하고, 기존 AC-10 검사에 실제 타이머 mesh 생성 확인을 추가한다. 전체 suite와 두 빌드를 다시 실행한다.
 
 웹에서는 브라우저의 한글 조합을 보존하는 별도 입력창을 동일 CommandManager/uGUI 제출 경로로 연결한다. 게임 로직·판정은 기존 Unity 상태를 사용하고, 외부 서비스 키를 웹 빌드에 넣지 않는다. Pages 배포 후 실제 공개 URL의 게임 로딩·한국어 제출·요원 이동·분석 응답을 확인한다.
+
+최종 실행 `20261002-233403`의 EditMode 87/87, PlayMode 18/18, Windows 빌드/실행 초기화가 모두 통과했다. 타이머 mesh 생성과 실제 PNG의 `09:58` 표시를 확인했다. 최종 WebGL 빌드도 성공했다. 공개 Pages의 브라우저에서 시작 → 한국어 `메인 복도로 이동해` → 실제 요원 도착 → `22시 이후 연구실 출입자 찾아줘` → 출처·시간이 포함된 3건의 분석 응답을 확인했고 브라우저 Console error/warning은 0이었다.
+
+공개 결과: https://cheonyeon0316.github.io/ai-control-room-game/ · 저장소: https://github.com/cheonyeon0316/ai-control-room-game · Windows Release: `v0.1.0`. 업로드된 ZIP의 GitHub SHA256 digest와 로컬 파일의 해시가 일치한다. 전체 105개 자동 검사는 Unity Editor에서 실행했고, 웹 전체 미션 완주·실물 한글 IME 조합·사람의 재미 평가는 별도 범위로 남긴다.

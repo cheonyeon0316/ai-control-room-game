@@ -55,3 +55,9 @@ SPEC 기준의 각 수정 요구는 TASK 루프 0~6에 기록되어 있다. 최�
 실제 키보드 Enter·한글 IME 조합, 물리적 마우스 조작, 창 크기 변경과 음향 체감은 별도 사용자 플레이 확인 항목이다. 자동 UI 제출은 실제 uGUI 이벤트를 사용했다. Windows 실행 파일의 전체 수동 완주는 아직 수행하지 않았으며, 전체 미션 자동 완주는 실제 Unity PlayMode에서 검증했다.
 
 F01~F06 재미·학습 체감은 사람의 플레이 평가가 필요합니다. 자동 성공 조건의 통과가 이 평가를 대신하지 않습니다.
+
+### 공개 웹 배포 확인
+
+2026-10-02 최종 Unity WebGL 빌드와 GitHub Pages 배포가 성공했다. 실제 공개 URL `https://cheonyeon0316.github.io/ai-control-room-game/play/`에서 게임 로딩, 한글 Briefing, 4 CCTV, 타이머 표시, 브라우저 입력창의 한국어 지시, 실제 요원 이동과 출입 기록 분석 응답을 확인했다. 해당 브라우저 경로의 Console error/warning은 0이다.
+
+전체 87 EditMode + 18 PlayMode suite는 Unity Editor에서 실행한 결과다. 공개 WebGL의 전체 미션 완주는 이번 배포 확인 범위에 포함하지 않는다. Windows ZIP은 Release `v0.1.0`에 게시했고 GitHub asset digest와 로컬 SHA256가 일치한다.
