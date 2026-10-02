@@ -15,3 +15,5 @@
 .env.*
 !*.example
 TestResults/
+Assets/Resources/PerformanceTestRun*.json*
+Assets/InitTestScene*.unity*

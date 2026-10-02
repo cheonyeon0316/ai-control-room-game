@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1114">
+  <title>DATA LEAK · 관제실</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#080e11;color:#d0dcdd;font:14px system-ui,sans-serif}a{color:#6ee4cc;text-decoration:none}button,input,select{font:inherit}button,select{border:1px solid #32434a;background:#152228;color:#d0dcdd;border-radius:3px;padding:9px 12px}button{cursor:pointer}button:disabled{opacity:.45;cursor:wait}button:hover:enabled{border-color:#6ee4cc}header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 20px;border-bottom:1px solid #243239}header strong{letter-spacing:2px;color:#6ee4cc}header nav{display:flex;gap:18px;align-items:center}main{max-width:1920px;margin:0 auto;padding:12px 16px}.screen{position:relative;width:min(100%,calc((100vh - 210px)*16/9));margin:auto;aspect-ratio:16/9;background:#030708;box-shadow:0 0 0 1px #243239}canvas{display:block;width:100%;height:100%;outline:none}#loading{position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:14px;background:#0b1114}progress{width:240px;accent-color:#6ee4cc}#status{max-width:1100px;margin:12px auto;color:#819da5;font-size:12px}.dispatch{display:flex;gap:8px;max-width:1500px;margin:12px auto 0}.dispatch input{min-width:100px;flex:1;background:#101a20;border:1px solid #32434a;color:#e0eded;border-radius:3px;padding:12px}.dispatch input:focus{outline:2px solid #6ee4cc;outline-offset:1px}.send{background:#6ee4cc;color:#0b171a;border-color:#6ee4cc;font-weight:700}footer{max-width:1500px;margin:auto;padding:0 16px 12px;display:flex;justify-content:space-between;color:#69838b;font-size:11px}.error{color:#ffb584!important}#game:fullscreen{width:100vw;height:100vh;background:#000;display:grid;place-items:center}#game:fullscreen canvas{width:min(100vw,calc(100vh*16/9));height:min(100vh,calc(100vw*9/16))}@media(max-width:700px){header{padding:8px}header nav{gap:8px}main{padding:8px}.screen{width:100%}.dispatch{flex-wrap:wrap}.dispatch input{flex-basis:60%}footer{gap:8px}}
+  </style>
+</head>
+<body>
+  <header><a href="../"><strong>DATA LEAK</strong> / AI 관제 지휘</a><nav><a href="../#briefing">조작법</a><button id="start" disabled>작전 시작</button><button id="fullscreen" disabled>전체 화면</button></nav></header>
+  <main>
+    <div class="screen" id="game"><canvas id="unity-canvas" width="1920" height="1080" tabindex="0" aria-label="관제실 게임 화면"></canvas><div id="loading"><strong>관제실 연결 중</strong><progress id="progress" max="1" value="0"></progress><span>첫 실행 시 약 70 MB를 다운로드합니다.</span></div></div>
+    <form class="dispatch" id="dispatch"><select id="target" aria-label="명령 담당자"><option value="0">현장 요원</option><option value="1">분석 시스템</option></select><input id="prompt" aria-label="자연어 지시" placeholder="한국어 지시를 입력하세요. 예: 메인 복도로 이동해" autocomplete="off" maxlength="1000"><button id="send" class="send" disabled>Send →</button></form>
+    <p id="status" role="status">로딩 후 작전을 시작하세요. 아래 입력창은 한글 조합을 지원합니다. 전송은 Enter 또는 Send, CCTV 확대와 증거 확인은 게임 화면에서 조작합니다.</p>
+  </main>
+  <footer><span>DESKTOP · WebGL 2 · 기본 규칙 해석기</span><a href="licenses/NotoSansCJKkr-OFL.txt">Noto Sans CJK KR / OFL 1.1</a></footer>
+  <script src="Build/WebGL.loader.js"></script>
+  <script>
+    const canvas=document.getElementById('unity-canvas'),status=document.getElementById('status'),prompt=document.getElementById('prompt');
+    let gameInstance,composing=false;
+    function fail(message){status.textContent='실행 오류: '+message;status.classList.add('error');document.querySelector('#loading strong').textContent='관제실 연결 실패';}
+    createUnityInstance(canvas,{dataUrl:'Build/WebGL.data',frameworkUrl:'Build/WebGL.framework.js',codeUrl:'Build/WebGL.wasm',streamingAssetsUrl:'StreamingAssets',companyName:'Control Room Prototype',productName:'AI 관제 지휘 / DATA LEAK',productVersion:'0.1.0',devicePixelRatio:Math.min(window.devicePixelRatio||1,1.5),autoSyncPersistentDataPath:true,showBanner:(message,type)=>{if(type==='error')fail(message);}},progress=>document.getElementById('progress').value=progress).then(instance=>{gameInstance=instance;document.getElementById('loading').hidden=true;document.getElementById('loading').style.display='none';for(const id of ['start','send','fullscreen'])document.getElementById(id).disabled=false;}).catch(fail);
+    document.getElementById('start').addEventListener('click',()=>{gameInstance.SendMessage('Mission_01 Entry','BeginWebMission');prompt.focus();});
+    document.getElementById('fullscreen').addEventListener('click',()=>{document.documentElement.requestFullscreen().catch(error=>{status.textContent=error.message;});});
+    prompt.addEventListener('compositionstart',()=>composing=true);prompt.addEventListener('compositionend',()=>composing=false);
+    prompt.addEventListener('keydown',event=>{if(event.key==='Enter'&&(event.isComposing||composing||event.keyCode===229))event.preventDefault();});
+    document.getElementById('dispatch').addEventListener('submit',event=>{event.preventDefault();const text=prompt.value.trim();if(!gameInstance||!text||composing)return;gameInstance.SendMessage('Mission_01 Entry','SubmitWebCommand',JSON.stringify({target:Number(document.getElementById('target').value),prompt:text}));prompt.value='';prompt.focus();});
+  </script>
+</body>
+</html>
+

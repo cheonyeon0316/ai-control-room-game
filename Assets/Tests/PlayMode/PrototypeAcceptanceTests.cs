@@ -212,9 +212,18 @@ namespace ControlRoom.Tests
             game.Hud.StartButton.onClick.Invoke();
             yield return new WaitForSeconds(.15f);
             Assert.Less(game.Rules.RemainingSeconds, start);
+            Canvas.ForceUpdateCanvases();
+            var headerTimer = game.Hud.Canvas.GetComponentsInChildren<Text>().Single(text =>
+                text.transform.parent.name == "Console" && Regex.IsMatch(text.text, @"^\d{2}:\d{2}(?:  Ⅱ)?$"));
+            Assert.Greater(headerTimer.cachedTextGenerator.vertexCount, 0,
+                "The header timer must generate visible text vertices with the bundled font.");
             game.TogglePause(); float paused = game.Rules.RemainingSeconds;
             yield return new WaitForSeconds(.15f);
             Assert.AreEqual(paused, game.Rules.RemainingSeconds);
+            Canvas.ForceUpdateCanvases();
+            Assert.AreEqual(UIManager.FormatTime(paused) + "  Ⅱ", headerTimer.text);
+            Assert.Greater(headerTimer.cachedTextGenerator.vertexCount, 0,
+                "The paused header timer must still generate visible text vertices.");
             game.TogglePause();
             game.Rules.Tick(600);
             yield return null;

@@ -1637,3 +1637,16 @@ batchmode의 `ScreenCapture.CaptureScreenshot`은 실제 HUD PNG를 남기지 �
 - 외부 서비스 실호출, 실제 Enter/IME·물리 입력·음향 체감, F01~F06의 사람 플레이 평가는 별도 미검증 범위로 유지한다.
 
 실제 구현은 `Assets/Scripts/`, 재현 가능한 검사/빌드는 `scripts/`, 결과의 세부 구분은 `ACCEPTANCE.md`에 있다. 최초 실행 기준 시각은 최신 제작 문서(23:02)가 이미 존재하는 23:05로 설정하여 미래 출처가 먼저 노출되지 않게 했다(SPEC §14). 10분 카운트다운은 그대로 유지한다.
+
+### 웹 공개 배포 — 2026-10-02
+
+사용자 요청에 따라 `gh`로 공개 저장소 `cheonyeon0316/ai-control-room-game`을 만들고 GitHub Pages에 소개 페이지와 실제 Unity WebGL 플레이를 게시한다. Windows ZIP은 GitHub Release에 게시한다.
+
+- Web Build Support 설치, `Build-Web.ps1` 및 Pages 배포 workflow 추가.
+- Windows/Web 공통 한글 폰트 Noto Sans CJK KR 포함, OFL 1.1 원문 동봉.
+- 런타임 `CreatePrimitive`용 컴포넌트를 IL2CPP linker에서 보존하고 발광 Lit 재질 변형을 포함한다.
+- 실로그·라이선스·기계 경로가 있는 `TestResults/`는 공개에서 제외하며, 실제 87+18 검사 이름/상태만 공개 JSON으로 보존한다.
+
+실행 `20261002-232031`은 실제 EditMode 87/87, PlayMode 18/18 및 Windows 빌드/초기화 검사를 통과했다. WebGL 빌드와 실제 브라우저의 Briefing/CCTV/한글 표시도 확인했다. 브라우저 캡처 검토에서 새 폰트의 줄 높이로 상단 타이머가 잘리는 결함을 발견했다. SPEC §15와 AC-10의 제한시간 표시 요구에 따라 타이머 Text의 overflow를 수정하고, 기존 AC-10 검사에 실제 타이머 mesh 생성 확인을 추가한다. 전체 suite와 두 빌드를 다시 실행한다.
+
+웹에서는 브라우저의 한글 조합을 보존하는 별도 입력창을 동일 CommandManager/uGUI 제출 경로로 연결한다. 게임 로직·판정은 기존 Unity 상태를 사용하고, 외부 서비스 키를 웹 빌드에 넣지 않는다. Pages 배포 후 실제 공개 URL의 게임 로딩·한국어 제출·요원 이동·분석 응답을 확인한다.

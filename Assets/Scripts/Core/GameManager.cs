@@ -27,6 +27,9 @@ namespace ControlRoom
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
             DontDestroyOnLoad(gameObject);
+#if UNITY_WEBGL && !UNITY_EDITOR
+            WebGLInput.captureAllKeyboardInput = false;
+#endif
             Application.targetFrameRate = 60;
             Rules = new MissionRules();
             Analysis = new AnalysisService();
@@ -89,6 +92,26 @@ namespace ControlRoom
         }
 
         public void StartMission() { Mission.StartMission(); Hud.HideBriefing(); }
+        // Native browser input preserves Korean IME composition before dispatching.
+        public void BeginWebMission()
+        {
+            if (Rules.State == MissionState.Briefing) StartMission();
+        }
+        public void SubmitWebCommand(string payload)
+        {
+            if (!CanAct) return;
+            var request = JsonUtility.FromJson<WebCommandRequest>(payload);
+            if (request == null || string.IsNullOrWhiteSpace(request.prompt)) return;
+            Hud.TargetDropdown.value = request.target == 1 ? 1 : 0;
+            Hud.CommandInput.text = request.prompt;
+            Hud.SendButton.onClick.Invoke();
+        }
+        [Serializable]
+        private sealed class WebCommandRequest
+        {
+            public int target;
+            public string prompt;
+        }
         public void TogglePause()
         {
             Rules.SetPaused(!Rules.Paused);

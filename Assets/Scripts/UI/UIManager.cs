@@ -100,6 +100,7 @@ namespace ControlRoom
             Label(parent, "DATA LEAK", 32, 52, 590, 65, 45, ink, FontStyle.Bold);
             Label(parent, "RESEARCH FACILITY  /  REMOTE OPERATIONS", 640, 64, 650, 32, 16, dim);
             time = Label(parent, "10:00", 1320, 38, 245, 62, 44, ink, FontStyle.Bold);
+            time.verticalOverflow = VerticalWrapMode.Overflow;
             risk = Label(parent, "RISK · LOW", 1585, 44, 225, 48, 18, mint);
             Button(parent, "Ⅱ", 1832, 43, 56, 44, () => game.TogglePause(), panel, ink);
             Panel(parent, "Header divider", 32, 126, 1856, 2, border);

@@ -31,6 +31,11 @@ if (-not (Test-Path -LiteralPath (Join-Path $webBuildPath 'index.html'))) { thro
 $webPublishPath = Join-Path $webProjectPath 'web\play'
 New-Item -ItemType Directory -Path $webPublishPath -Force | Out-Null
 Get-ChildItem -LiteralPath $webBuildPath | Copy-Item -Destination $webPublishPath -Recurse -Force
+$webLoader = Get-ChildItem -LiteralPath (Join-Path $webPublishPath 'Build') -Filter '*.loader.js' -File | Select-Object -First 1
+if ($null -eq $webLoader) { throw 'Web build loader was not found.' }
+$webBuildName = $webLoader.Name.Replace('.loader.js', '')
+$webTemplate = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'WebPlayerTemplate.html') -Raw
+Set-Content -LiteralPath (Join-Path $webPublishPath 'index.html') -Value $webTemplate.Replace('{{BUILD_NAME}}', $webBuildName) -Encoding utf8NoBOM
 $webLicensePath = Join-Path $webPublishPath 'licenses'
 New-Item -ItemType Directory -Path $webLicensePath -Force | Out-Null
 Copy-Item -LiteralPath (Join-Path $webProjectPath 'Assets\Resources\Fonts\OFL.txt') -Destination (Join-Path $webLicensePath 'NotoSansCJKkr-OFL.txt') -Force

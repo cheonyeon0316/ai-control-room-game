@@ -6,7 +6,7 @@
 
 2026-10-02 실행 결과:
 
-- 최종 실행: `TestResults/runs/20261002-232031/` (웹용 공통 한글 폰트 추가 후 재검증).
+- 최종 실행: `TestResults/runs/20261002-233403/` (웹 공통 폰트와 타이머 렌더링 수정 후 재검증).
 - 실제 Unity **EditMode 87/87 PASS**, **PlayMode 18/18 PASS**. 실패·skip·inconclusive 0.
 - 전체 Runtime(25파일) / Editor / EditMode / PlayMode C# 어셈블리 컴파일: PASS, 오류 0.
 - 실제 D3D11 렌더에서 CCTV 셰이더·카메라·HUD·사진을 확인했다. 최종 테스트 경로에서 예기치 않은 Console 오류 0.
@@ -38,6 +38,7 @@
 | `20261002-224213` | EditMode 87 PASS, PlayMode 18 PASS, 빌드·실행 초기화 PASS | 사진 구도 확인 후 관제 안내 글씨 겹침 제거 |
 | `20261002-224815` | EditMode 87 PASS, PlayMode 18 PASS, 빌드·실행 초기화 PASS | 최종 동일 suite 재검증 완료 |
 | `20261002-232031` | EditMode 87 PASS, PlayMode 18 PASS, 빌드·실행 초기화 PASS | Noto Sans CJK KR 포함 후 재검증 |
+| `20261002-233403` | EditMode 87 PASS, PlayMode 18 PASS, 빌드·실행 초기화 PASS | 타이머 실제 mesh 생성·일시정지 표시 검사 추가 후 통과 |
 
 SPEC 기준의 각 수정 요구는 TASK 루프 0~6에 기록되어 있다. 최종 실제 `control-room.png`, `field-photo.png`, `mission-result.png`를 검토하여 CCTV 구분·요원/경비 실루엣·캐비닛 사진·결과 표시를 확인했다.
 
