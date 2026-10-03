@@ -42,8 +42,11 @@ namespace ControlRoom
         private readonly Dictionary<CommandStatus, AudioClip> radioCues = new Dictionary<CommandStatus, AudioClip>();
         private Texture2D lineTexture;
         private Material feedMaterial;
+        private Texture2D componentAtlas, fieldAgentSheet, guardSheet, vfxSheet;
+        private RawImage agentPortrait, guardPortrait, responseStatusIcon, riskPulse;
+        private Text sendHint;
         private bool viewingEvidence, viewingHelp, success;
-        private float nextPaint;
+        private float nextPaint, nextPortraitFrame, nextRiskFrame;
         private readonly Color bg = new Color(.025f, .037f, .048f);
         private readonly Color panel = new Color(.053f, .073f, .085f);
         private readonly Color border = new Color(.14f, .20f, .22f);
@@ -55,6 +58,10 @@ namespace ControlRoom
         public void Build(GameManager owner)
         {
             game = owner;
+            componentAtlas = Resources.Load<Texture2D>("GeneratedArt/UI/Command_UI_Components_Atlas");
+            fieldAgentSheet = Resources.Load<Texture2D>("GeneratedArt/Characters/FieldAgent_SpriteSheet");
+            guardSheet = Resources.Load<Texture2D>("GeneratedArt/Characters/Guard_SpriteSheet");
+            vfxSheet = Resources.Load<Texture2D>("GeneratedArt/VFX/ControlRoom_VFX_SpriteSheet");
             font = Resources.Load<Font>("Fonts/NotoSansCJKkr-Regular");
 #if !UNITY_WEBGL || UNITY_EDITOR
             if (font == null)
@@ -101,7 +108,14 @@ namespace ControlRoom
             Label(parent, "RESEARCH FACILITY  /  REMOTE OPERATIONS", 640, 64, 650, 32, 16, dim);
             time = Label(parent, "10:00", 1320, 38, 245, 62, 44, ink, FontStyle.Bold);
             time.verticalOverflow = VerticalWrapMode.Overflow;
-            risk = Label(parent, "RISK · LOW", 1585, 44, 225, 48, 18, mint);
+            if (vfxSheet != null)
+            {
+                riskPulse = AtlasImage(parent, "Generated risk pulse", 1577, 42, 38, 38,
+                    vfxSheet, new Rect(0, 512, 384, 256));
+                riskPulse.color = new Color(1f, .72f, .35f, .62f);
+                riskPulse.gameObject.SetActive(false);
+            }
+            risk = Label(parent, "RISK · LOW", 1618, 44, 192, 48, 18, mint);
             Button(parent, "Ⅱ", 1832, 43, 56, 44, () => game.TogglePause(), panel, ink);
             Panel(parent, "Header divider", 32, 126, 1856, 2, border);
             Label(parent, "LIVE SURVEILLANCE  /  카메라를 선택하면 확대됩니다", 32, 138, 1250, 28, 15, dim);
@@ -148,9 +162,15 @@ namespace ControlRoom
         private void BuildSidebar(RectTransform parent)
         {
             var side = Panel(parent, "Operations sidebar", 1320, 177, 568, 637, panel);
-            Label(side, "FIELD UNIT  /  ECHO-1", 22, 18, 520, 30, 16, mint);
-            agent = Label(side, "ENTRANCE · Idle", 22, 52, 520, 42, 24, ink);
-            objectives = Label(side, "목표: 기밀 USB 회수 후 출입구로 탈출\n시설 봉쇄 전까지 10분", 22, 102, 520, 76, 18, ink);
+            if (fieldAgentSheet != null)
+            {
+                Panel(side, "Field unit portrait frame", 18, 14, 66, 88, new Color(.018f, .032f, .042f, .92f));
+                agentPortrait = AtlasImage(side, "Field unit portrait", 21, 12, 60, 90,
+                    fieldAgentSheet, new Rect(0, 0, 192, 256));
+            }
+            Label(side, "FIELD UNIT  /  ECHO-1", 98, 18, 440, 30, 16, mint);
+            agent = Label(side, "ENTRANCE · Idle", 98, 52, 440, 42, 24, ink);
+            objectives = Label(side, "목표: 기밀 USB 회수 후 출입구로 탈출\n시설 봉쇄 전까지 10분", 22, 108, 524, 70, 18, ink);
             Panel(side, "Sidebar divider", 22, 192, 524, 1, border);
             Button(side, "작전 기록", 22, 212, 154, 40, () => { viewingEvidence = false; viewingHelp = false; RefreshSidebar(); }, border, ink);
             Button(side, "증거 자료", 187, 212, 154, 40, () => { viewingEvidence = true; viewingHelp = false; RefreshSidebar(); }, border, ink);
@@ -170,6 +190,7 @@ namespace ControlRoom
             InterpreterButton = Button(command, "MODE · OFFLINE", 1620, 13, 214, 30, ToggleInterpreter, border, ink);
             TargetDropdown = MakeDropdown(command, 22, 54, 218, 57);
             var inputRoot = Panel(command, "Command input", 260, 54, 1338, 57, bg);
+            SkinWithAtlas(inputRoot, new Rect(296, 86, 290, 146), 40, 36);
             var text = Label(inputRoot, "", 18, 8, 1297, 43, 22, ink);
             var placeholder = Label(inputRoot, "지시를 입력하세요. 예: 메인 복도로 이동해", 18, 8, 1297, 43, 20, dim);
             CommandInput = inputRoot.gameObject.AddComponent<InputField>();
@@ -178,9 +199,16 @@ namespace ControlRoom
             CommandInput.characterLimit = 800; CommandInput.caretColor = mint; CommandInput.customCaretColor = true;
             CommandInput.selectionColor = new Color(mint.r, mint.g, mint.b, .28f);
             CommandInput.onEndEdit.AddListener(_ => { if ((Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) && string.IsNullOrEmpty(Input.compositionString)) SubmitCommand(); });
-            SendButton = Button(command, "SEND  →", 1620, 54, 214, 57, SubmitCommand, mint, bg);
+            SendButton = Button(command, "SEND  →", 1620, 54, 214, 57, SubmitCommand, bg, mint);
+            SkinWithAtlas(SendButton.GetComponent<RectTransform>(), new Rect(896, 86, 198, 146), 34, 38);
             liveResponse = Label(command, "대기 · 현장 상황을 관찰하고 담당자에게 명령하세요.", 260, 126, 1574, 53, 18, dim);
-            Label(command, "ENTER TO SEND", 22, 133, 225, 35, 13, dim);
+            sendHint = Label(command, "ENTER TO SEND", 22, 133, 225, 35, 13, dim);
+            if (componentAtlas != null)
+            {
+                responseStatusIcon = AtlasImage(command, "Command status art", 24, 126, 58, 58,
+                    componentAtlas, new Rect(24, 278, 78, 96));
+                responseStatusIcon.gameObject.SetActive(false);
+            }
         }
 
         private void BuildBriefing(RectTransform parent)
@@ -192,6 +220,7 @@ namespace ControlRoom
             Label(briefing, "ECHO-1은 출입구에서 대기 중입니다.\nCCTV와 현장 보고, 자료 분석을 통해 현재 상황을 파악하십시오.\n오래된 자료는 현장 상황과 다를 수 있습니다.", 50, 362, 1230, 142, 23, dim);
             Panel(briefing, "Briefing rule", 50, 540, 1230, 1, border);
             Label(briefing, "PRIMARY   USB 회수 + 출입구 탈출\nSECONDARY   유출에 관여한 인물 식별\nTHREAT   경비에게 발견되거나 제한시간이 끝나면 작전 실패", 50, 574, 1230, 134, 21, ink);
+            BuildBriefingProfiles(briefing);
             StartButton = Button(briefing, "작전 시작  →", 948, 735, 332, 62, () => game.StartMission(), mint, bg);
             Label(briefing, "1 FIELD UNIT   /   4 CCTV   /   1 ANALYSIS SYSTEM", 50, 748, 850, 35, 15, dim);
         }
@@ -308,6 +337,7 @@ namespace ControlRoom
             time.color = game.Rules.RemainingSeconds < 60 ? amber : ink;
             risk.text = "RISK · " + game.Rules.Risk;
             risk.color = game.Rules.Risk == RiskLevel.LOW ? mint : amber;
+            UpdateGeneratedArtAnimation();
             agent.text = TranslateLocation(game.World.Agent.CurrentLocationId) + " · " + game.World.Agent.State;
             objectives.text = (game.Rules.HasUsb ? "✓ USB 확보" : "□ 기밀 USB 회수") + "\n" + (game.Rules.State == MissionState.Success ? "✓ 요원 탈출 완료" : "□ 출입구로 요원 복귀");
             SendButton.interactable = game.CanAct;
@@ -328,6 +358,7 @@ namespace ControlRoom
             if (preview.Length > 135) preview = preview.Substring(0, 135) + "…";
             liveResponse.text = status + " · " + preview;
             liveResponse.color = status == CommandStatus.FAILED || status == CommandStatus.NEEDS_CLARIFICATION ? amber : mint;
+            SetResponseStatusArt(status);
             AddLog("[" + game.MissionTimestamp.ToString("HH:mm:ss") + "] " + status + "\n" + message);
             if (audioSource != null && radioCues.TryGetValue(status, out AudioClip cue))
                 audioSource.PlayOneShot(cue, status == CommandStatus.RECEIVED || status == CommandStatus.PROCESSING || status == CommandStatus.EXECUTING ? .035f : .17f);
@@ -423,8 +454,9 @@ namespace ControlRoom
         private Dropdown MakeDropdown(Transform parent, float x, float y, float w, float h)
         {
             var root = Panel(parent, "Dispatch target", x, y, w, h, border);
+            SkinWithAtlas(root, new Rect(18, 82, 260, 150), 50, 35);
             var dropdown = root.gameObject.AddComponent<Dropdown>();
-            var caption = Label(root, "FIELD AGENT", 12, 10, w - 35, h - 20, 17, ink); caption.alignment = TextAnchor.MiddleLeft;
+            var caption = Label(root, "FIELD AGENT", 70, 10, w - 92, h - 20, 16, ink); caption.alignment = TextAnchor.MiddleLeft;
             Label(root, "⌄", w - 28, 13, 23, 26, 19, mint);
             var template = Panel(root, "Template", 0, -108, w, 100, border);
             var scroll = template.gameObject.AddComponent<ScrollRect>(); scroll.horizontal = false;
@@ -442,6 +474,107 @@ namespace ControlRoom
         }
         private static void Place(RectTransform rect, float x, float y, float w, float h)
         { rect.anchorMin = rect.anchorMax = new Vector2(0, 1); rect.pivot = new Vector2(0, 1); rect.anchoredPosition = new Vector2(x, -y); rect.sizeDelta = new Vector2(w, h); }
+
+        private RawImage AtlasImage(Transform parent, string name, float x, float y, float w, float h, Texture2D atlas, Rect pixels)
+        {
+            var raw = Image(parent, name, x, y, w, h, atlas);
+            raw.raycastTarget = false;
+            raw.uvRect = AtlasUv(atlas, pixels);
+            return raw;
+        }
+
+        private void SkinWithAtlas(RectTransform target, Rect source, float sourceBorderX, float sourceBorderY)
+        {
+            if (target == null || componentAtlas == null) return;
+            float width = target.rect.width, height = target.rect.height;
+            if (width <= 0 || height <= 0) return;
+            float sourceLeft = Mathf.Min(sourceBorderX, source.width * .45f);
+            float sourceTop = Mathf.Min(sourceBorderY, source.height * .45f);
+            float targetLeft = Mathf.Min(width * .32f, sourceLeft * .55f);
+            float targetTop = Mathf.Min(height * .32f, sourceTop * .55f);
+            float[] sx = { source.x, source.x + sourceLeft, source.x + source.width - sourceLeft, source.x + source.width };
+            float[] sy = { source.y, source.y + sourceTop, source.y + source.height - sourceTop, source.y + source.height };
+            float[] dx = { 0, targetLeft, width - targetLeft, width };
+            float[] dy = { 0, targetTop, height - targetTop, height };
+            for (int row = 0; row < 3; row++)
+            for (int column = 0; column < 3; column++)
+            {
+                float pieceWidth = dx[column + 1] - dx[column];
+                float pieceHeight = dy[row + 1] - dy[row];
+                if (pieceWidth <= 0 || pieceHeight <= 0) continue;
+                var piece = AtlasImage(target, "Generated HUD frame", dx[column], dy[row], pieceWidth, pieceHeight,
+                    componentAtlas, new Rect(sx[column], sy[row], sx[column + 1] - sx[column], sy[row + 1] - sy[row]));
+                piece.transform.SetAsFirstSibling();
+            }
+        }
+
+        private static Rect AtlasUv(Texture2D atlas, Rect pixels)
+        {
+            if (atlas == null) return new Rect(0, 0, 1, 1);
+            float inset = 1f;
+            float x = pixels.x + inset, y = pixels.y + inset;
+            float width = Mathf.Max(1, pixels.width - inset * 2f), height = Mathf.Max(1, pixels.height - inset * 2f);
+            return new Rect(x / atlas.width, 1f - (y + height) / atlas.height, width / atlas.width, height / atlas.height);
+        }
+
+        private void BuildBriefingProfiles(RectTransform parent)
+        {
+            BuildBriefingProfile(parent, "ECHO-1 / FIELD AGENT", 914, fieldAgentSheet, new Color(.07f, .12f, .15f, .94f));
+            BuildBriefingProfile(parent, "SECURITY / GUARD", 1080, guardSheet, new Color(.15f, .095f, .055f, .94f));
+        }
+
+        private void BuildBriefingProfile(RectTransform parent, string caption, float x, Texture2D sheet, Color accent)
+        {
+            if (sheet == null) return;
+            var card = Panel(parent, caption + " art card", x, 220, 150, 260, new Color(.025f, .038f, .048f, .92f));
+            Panel(card, "Profile accent", 0, 0, 3, 260, accent);
+            AtlasImage(card, caption + " sprite", 10, 8, 130, 184, sheet, new Rect(0, 0, 192, 256));
+            var label = Label(card, caption, 6, 204, 140, 42, 13, caption.Contains("GUARD") ? amber : mint);
+            label.alignment = TextAnchor.MiddleCenter;
+        }
+
+        private void UpdateGeneratedArtAnimation()
+        {
+            if (agentPortrait != null && Time.unscaledTime >= nextPortraitFrame)
+            {
+                nextPortraitFrame = Time.unscaledTime + .11f;
+                FieldAgent field = game.World.Agent;
+                int row = field.State == AgentState.Moving ? 1 : field.State == AgentState.Hidden ? 2 :
+                    field.State == AgentState.Interacting || field.State == AgentState.Reporting ? 3 : 0;
+                int column = Mathf.FloorToInt(Time.unscaledTime * 8f) % 8;
+                agentPortrait.uvRect = AtlasUv(fieldAgentSheet, new Rect(column * 192, row * 256, 192, 256));
+            }
+            if (riskPulse != null)
+            {
+                bool elevated = game.Rules.Risk != RiskLevel.LOW;
+                riskPulse.gameObject.SetActive(elevated);
+                if (elevated && Time.unscaledTime >= nextRiskFrame)
+                {
+                    nextRiskFrame = Time.unscaledTime + .14f;
+                    int frame = Mathf.FloorToInt(Time.unscaledTime * 7f) % 4;
+                    riskPulse.uvRect = AtlasUv(vfxSheet, new Rect(frame * 384, 512, 384, 256));
+                }
+            }
+        }
+
+        private void SetResponseStatusArt(CommandStatus status)
+        {
+            if (responseStatusIcon == null) return;
+            Rect pixels;
+            switch (status)
+            {
+                case CommandStatus.RECEIVED: pixels = new Rect(24, 278, 78, 96); break;
+                case CommandStatus.PROCESSING: pixels = new Rect(296, 278, 78, 96); break;
+                case CommandStatus.EXECUTING: pixels = new Rect(575, 278, 78, 96); break;
+                case CommandStatus.COMPLETED: pixels = new Rect(852, 278, 78, 96); break;
+                case CommandStatus.NEEDS_CLARIFICATION: pixels = new Rect(1127, 278, 78, 96); break;
+                default: pixels = new Rect(24, 432, 78, 105); break;
+            }
+            responseStatusIcon.uvRect = AtlasUv(componentAtlas, pixels);
+            responseStatusIcon.gameObject.SetActive(true);
+            if (sendHint != null) sendHint.gameObject.SetActive(false);
+        }
+
         public static string FormatTime(float seconds) { int total = Mathf.CeilToInt(Mathf.Max(0, seconds)); return (total / 60).ToString("00") + ":" + (total % 60).ToString("00"); }
         public static string TranslateLocation(string id)
         { switch (id) { case "ENTRANCE": case "EXIT": return "출입구"; case "MAIN_HALL": return "메인 복도"; case "LABORATORY": return "연구실"; case "STORAGE": return "창고"; case "SERVER_ROOM": return "서버실"; default: return id; } }

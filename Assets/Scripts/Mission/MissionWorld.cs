@@ -17,9 +17,12 @@ namespace ControlRoom
         public bool NavigationReady { get; private set; }
         private readonly List<NavMeshBuildSource> navigationSources = new List<NavMeshBuildSource>();
         private readonly List<Material> materials = new List<Material>();
+        private readonly Dictionary<RectInt, Texture2D> facilitySurfaces = new Dictionary<RectInt, Texture2D>();
+        private readonly List<Texture2D> generatedTextures = new List<Texture2D>();
         private NavMeshData navigationData;
         private NavMeshDataInstance navigationInstance;
         private Material wall, metal, black, cyan, amber, white, agentBlue, guardOrange;
+        private Texture2D facilitySurfaceAtlas;
         private bool built;
 
         public void Build()
@@ -32,7 +35,9 @@ namespace ControlRoom
             Locations.Add("LABORATORY", new Vector3(14, 0, 0));
             Locations.Add("STORAGE", new Vector3(0, 0, 14));
             Locations.Add("SERVER_ROOM", new Vector3(14, 0, 14));
+            facilitySurfaceAtlas = Resources.Load<Texture2D>("GeneratedArt/Environment/Facility_Floor_Wall_Tiles");
             wall = Mat("Concrete", new Color(.25f, .3f, .34f));
+            ApplyTexture(wall, Surface(new RectInt(1030, 516, 498, 498)), new Vector2(2f, 1.25f), new Color(.72f, .79f, .84f));
             metal = Mat("Brushed steel", new Color(.32f, .41f, .46f));
             black = Mat("Equipment graphite", new Color(.06f, .085f, .11f));
             cyan = Mat("Operator signal", new Color(.18f, .92f, .9f), true);
@@ -89,9 +94,37 @@ namespace ControlRoom
             return item;
         }
 
-        private void Floor(string room, Vector3 center, Vector2 size, Color color)
+        private Texture2D Surface(RectInt topLeftBounds)
         {
-            Box("Floor " + room, center + new Vector3(0, -.15f, 0), new Vector3(size.x, .3f, size.y), Mat(room + " floor", color), true);
+            if (facilitySurfaceAtlas == null || !facilitySurfaceAtlas.isReadable) return null;
+            if (facilitySurfaces.TryGetValue(topLeftBounds, out Texture2D cached)) return cached;
+            int bottom = facilitySurfaceAtlas.height - topLeftBounds.y - topLeftBounds.height;
+            var texture = new Texture2D(topLeftBounds.width, topLeftBounds.height, TextureFormat.RGB24, true, false)
+            { name = "Generated facility surface", wrapMode = TextureWrapMode.Repeat, filterMode = FilterMode.Trilinear, anisoLevel = 4 };
+            texture.SetPixels(facilitySurfaceAtlas.GetPixels(topLeftBounds.x, bottom, topLeftBounds.width, topLeftBounds.height));
+            texture.Apply(true, false);
+            facilitySurfaces.Add(topLeftBounds, texture);
+            generatedTextures.Add(texture);
+            return texture;
+        }
+
+        private static void ApplyTexture(Material material, Texture2D texture, Vector2 tiling, Color tint)
+        {
+            if (material == null || texture == null) return;
+            material.mainTexture = texture;
+            material.mainTextureScale = tiling;
+            material.color = tint;
+            if (material.HasProperty("_BaseMap")) material.SetTexture("_BaseMap", texture);
+            if (material.HasProperty("_BaseColor")) material.SetColor("_BaseColor", tint);
+        }
+
+        private void Floor(string room, Vector3 center, Vector2 size, Color color, RectInt surfaceBounds)
+        {
+            var floorMaterial = Mat(room + " floor", color);
+            Texture2D floorTexture = Surface(surfaceBounds);
+            ApplyTexture(floorMaterial, floorTexture,
+                new Vector2(Mathf.Max(.75f, size.x / 5f), Mathf.Max(.75f, size.y / 5f)), Color.white);
+            Box("Floor " + room, center + new Vector3(0, -.15f, 0), new Vector3(size.x, .3f, size.y), floorMaterial, true);
             // The embedded stripe makes exits and corridor directions visible at CCTV resolution.
             Box(room + " floor stripe", center + new Vector3(0, .012f, 0), new Vector3(.12f, .014f, size.y - .8f), cyan);
             Label(room, center + new Vector3(-size.x * .32f, .025f, -size.y * .32f));
@@ -103,15 +136,20 @@ namespace ControlRoom
 
         private void BuildFacility()
         {
-            Floor("ENTRANCE", Locations["ENTRANCE"], new Vector2(9, 8), new Color(.13f, .2f, .24f));
-            Floor("MAIN HALL", Locations["MAIN_HALL"], new Vector2(10, 10), new Color(.17f, .24f, .27f));
-            Floor("LABORATORY", Locations["LABORATORY"], new Vector2(10, 10), new Color(.2f, .29f, .32f));
-            Floor("STORAGE", Locations["STORAGE"], new Vector2(10, 10), new Color(.25f, .23f, .19f));
-            Floor("SERVER ROOM", Locations["SERVER_ROOM"], new Vector2(10, 10), new Color(.14f, .2f, .28f));
-            Floor("ENTRY LINK", new Vector3(0, 0, -6.5f), new Vector2(4, 3.5f), new Color(.16f, .22f, .24f));
-            Floor("LAB LINK", new Vector3(7, 0, 0), new Vector2(4.4f, 4), new Color(.16f, .22f, .24f));
-            Floor("STORAGE LINK", new Vector3(0, 0, 7), new Vector2(4, 4.4f), new Color(.16f, .22f, .24f));
-            Floor("SERVER LINK", new Vector3(7, 0, 14), new Vector2(4.4f, 4), new Color(.16f, .22f, .24f));
+            RectInt entranceEpoxy = new RectInt(6, 6, 500, 498);
+            RectInt hallConcrete = new RectInt(520, 6, 497, 498);
+            RectInt laboratoryTile = new RectInt(1030, 6, 498, 498);
+            RectInt storageTile = new RectInt(6, 516, 500, 500);
+            RectInt serverFloor = new RectInt(520, 516, 497, 500);
+            Floor("ENTRANCE", Locations["ENTRANCE"], new Vector2(9, 8), Color.white, entranceEpoxy);
+            Floor("MAIN HALL", Locations["MAIN_HALL"], new Vector2(10, 10), Color.white, hallConcrete);
+            Floor("LABORATORY", Locations["LABORATORY"], new Vector2(10, 10), Color.white, laboratoryTile);
+            Floor("STORAGE", Locations["STORAGE"], new Vector2(10, 10), Color.white, storageTile);
+            Floor("SERVER ROOM", Locations["SERVER_ROOM"], new Vector2(10, 10), Color.white, serverFloor);
+            Floor("ENTRY LINK", new Vector3(0, 0, -6.5f), new Vector2(4, 3.5f), Color.white, entranceEpoxy);
+            Floor("LAB LINK", new Vector3(7, 0, 0), new Vector2(4.4f, 4), Color.white, hallConcrete);
+            Floor("STORAGE LINK", new Vector3(0, 0, 7), new Vector2(4, 4.4f), Color.white, storageTile);
+            Floor("SERVER LINK", new Vector3(7, 0, 14), new Vector2(4.4f, 4), Color.white, serverFloor);
             HorizontalWall("entrance south", 0, -16, 9);
             VerticalWall("entrance west", -4.5f, -12, 8);
             VerticalWall("entrance east", 4.5f, -12, 8);
@@ -319,6 +357,7 @@ namespace ControlRoom
             ReleaseNavigation();
             if (navigationData != null) Destroy(navigationData);
             foreach (Material material in materials) if (material != null) Destroy(material);
+            foreach (Texture2D texture in generatedTextures) if (texture != null) Destroy(texture);
         }
     }
 }

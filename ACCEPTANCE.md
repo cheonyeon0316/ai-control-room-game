@@ -12,6 +12,14 @@
 - 자동 검증 사례: 부정된 한국어/영어 이동 차단, 잠긴 문 조건부 이동 차단, `가져오지 말고 보고` 보존, terminal `OPEN` 후 증거 보존, PURGE 요청 후 취소 보존, 정확한 `삭제 확정` 후 `EVIDENCE_DESTROYED` 대상/원인 기록.
 - 공개 Pages WebGL smoke 결과는 아래에 별도로 기록했다. 이번 요청서의 전체 Windows 사람 플레이, 물리 키보드·마우스/한글 IME, 사람의 재미 평가는 자동화된 Unity 테스트와 구분하며 **NOT RUN**이다.
 
+## 2026-10-03 생성 아트 런타임 통합 · v0.1.2
+
+- 실제 Unity 실행 `TestResults/runs/20261003-211949/`: EditMode **97/97**, PlayMode **19/19**, 실패·skip·inconclusive 0.
+- `MissionWorld`가 생성된 바닥·벽 타일을 실제 구역 재질로 읽어 NavMesh를 그대로 유지한다. `UIManager`는 명령 입력·담당자 선택·전송 프레임, 색상별 응답 아이콘, 상태 행에 맞춰 움직이는 현장 요원 초상, 위험 상승 VFX를 사용한다. 브리핑에는 요원·경비 시트를 표시한다.
+- 테스트 HUD/카메라/결과 캡처: `TestResults/runs/20261003-211949/control-room.png`, `cam-01.png`, `mission-result.png`.
+- Windows v0.1.2 빌드 및 실제 플레이어 시작: PASS. Boot → Mission_01, CCTV 4개, NavMesh, Briefing, 시작 오류 0. 재검증 로그 `TestResults/player-startup-20261003-212907.log`.
+- WebGL v0.1.2 빌드: `scripts/Build-Web.ps1` PASS. 실제 빌드 파일은 `web/play/Build/`에 있으며 결과를 Pages smoke 후 이 절에 덧붙인다.
+
 2026-10-02 실행 결과:
 
 - 최종 실행: `TestResults/runs/20261002-233403/` (웹 공통 폰트와 타이머 렌더링 수정 후 재검증).
