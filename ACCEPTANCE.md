@@ -8,7 +8,7 @@
 
 - 실제 Unity 실행: `TestResults/runs/20261003-174042/` — EditMode **97/97**, PlayMode **19/19**, 실패·skip·inconclusive 0.
 - Windows 빌드: `Builds/ControlRoom/ControlRoom.exe` 생성 PASS. 실제 플레이어가 Boot → Mission_01로 초기화되고 CCTV 4개·NavMesh·Briefing을 준비했으며 시작 오류가 없었다. 기록: `TestResults/player-startup-20261003-174302.log`.
-- WebGL 빌드: `scripts/Build-Web.ps1` PASS. 새 Unity 빌드가 `web/play/`에 생성됐다.
+- WebGL 빌드: `scripts/Build-Web.ps1` PASS. 새 Unity 빌드를 `web/play/`에 생성하고 Pages에 배포했다.
 - 자동 검증 사례: 부정된 한국어/영어 이동 차단, 잠긴 문 조건부 이동 차단, `가져오지 말고 보고` 보존, terminal `OPEN` 후 증거 보존, PURGE 요청 후 취소 보존, 정확한 `삭제 확정` 후 `EVIDENCE_DESTROYED` 대상/원인 기록.
 - 이번 요청서의 전체 Windows 사람 플레이, 물리 키보드·마우스/한글 IME, 사람의 재미 평가는 자동화된 Unity 테스트와 구분하며 **NOT RUN**이다. 공개 Pages 반영 후에는 브라우저 WebGL smoke 결과만 별도로 기록한다.
 
@@ -69,6 +69,10 @@ F01~F06 재미·학습 체감은 사람의 플레이 평가가 필요합니다. 
 
 ### 공개 웹 배포 확인
 
-2026-10-02 이전 WebGL 배포는 실제 공개 URL `https://cheonyeon0316.github.io/ai-control-room-game/play/`에서 게임 로딩, 한글 Briefing, 4 CCTV, 타이머 표시, 브라우저 입력창의 한국어 지시, 실제 요원 이동과 출입 기록 분석 응답을 확인했다. 해당 브라우저 경로의 Console error/warning은 0이다.
+2026-10-02 이전 WebGL 배포에서는 공개 URL의 게임 로딩, 한글 Briefing, 4 CCTV, 타이머, 실제 요원 이동과 분석 응답을 확인했다.
 
-전체 97 EditMode + 19 PlayMode suite는 Unity Editor에서 실행한 결과다. 2026-10-03 WebGL 갱신 배포의 공개 URL smoke는 완료 후 별도로 기록한다. 공개 WebGL의 전체 미션 완주 및 Windows ZIP 전체 사람 플레이는 이번 자동화 검증 범위에 포함하지 않는다. 이전 Windows ZIP은 Release `v0.1.0`에 보존한다.
+2026-10-03에는 commit `c3e32e6`의 새 WebGL 바이너리와 최신 테스트 집계를 Pages에 배포했고 workflow `37111032525`가 성공했다. 실제 공개 WebGL에서 한국어 `연구실로 이동하지 마`와 `문이 잠겨 있으면 연구실로 이동해`를 입력했다. 둘 다 `FAILED`로 반환했고 화면의 요원은 메인 복도에서 `Idle` 상태로 남아 이동하지 않았다. 홈 화면에는 v0.1.1, Windows 다운로드 링크, Unity 97/97·PlayMode 19/19 집계가 표시된다. footer에 v0.1.0이 남은 표시 불일치는 수정했고 후속 Pages workflow `37111227861`도 성공했다.
+
+Windows Release `v0.1.1`에 ZIP을 게시했다. 로컬 SHA256 `9df964e0a90656ca09e0863bbbf3d97c474809961e8ce52e2bb2de6623c74beb`가 GitHub asset digest와 일치한다. 기존 v0.1.0 태그와 릴리스는 보존했다.
+
+물리 키보드·마우스/실물 한글 IME 조합과 공개 WebGL의 전체 미션 완주, Windows ZIP 전체 사람 플레이, 재미 평가는 **NOT RUN**이다. 전체 미션 자동 완주는 실제 Unity PlayMode에서 검증했다. 실제 외부 LLM 서비스 호출도 설정/자격 증명이 없어 **NOT RUN**이다.

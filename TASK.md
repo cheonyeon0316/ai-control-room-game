@@ -1661,8 +1661,8 @@ batchmode의 `ScreenCapture.CaptureScreenshot`은 실제 HUD PNG를 남기지 �
 
 - [완료] R01 — 부정·미지원 조건문을 보수적으로 해석한다. 부정된 이동은 실행하지 않고, 현장 요원이 확인할 수 없는 조건이 들어간 명령은 거절한다. 지원하는 `GUARD_CLEAR`와 "가져오지 말고 주변 보고"는 기존 순서/제한 의미를 보존한다.
 - [완료] R02 — 터미널 `OPEN`은 안내 화면을 제공하고 증거를 보존한다. `PURGE`는 터미널 전용 동작이며, 같은 명령을 제출한 뒤 별도의 정확한 삭제 확인을 받아야 실행한다. 취소·새 명령은 대기 중인 삭제를 취소하고, 최종 파괴 기록에는 대상과 원인을 남긴다.
-- [완료] R03 자동 검증 — EditMode 97/97, PlayMode 19/19, Windows 빌드·초기화, WebGL 빌드 PASS. 공개 Pages smoke와 물리 키보드·마우스/IME 및 전체 Windows 사람 플레이는 별도 검증 대상으로 유지한다.
-- [진행] 공개 저장소 `main`과 Pages에 v0.1.1 결과를 반영하고, 기존 v0.1.0 태그·릴리스는 보존한다.
+- [완료] R03 자동 검증 — EditMode 97/97, PlayMode 19/19, Windows 빌드·초기화, WebGL 빌드, 공개 Pages smoke PASS. 물리 키보드·마우스/IME 및 전체 Windows 사람 플레이는 `NOT RUN`이다.
+- [완료] 공개 저장소 `main`과 Pages에 v0.1.1 결과를 반영하고, Windows Release v0.1.1에 ZIP을 게시했다. 기존 v0.1.0 태그·릴리스는 보존한다.
 
 R01/R02의 세부 판정은 회귀 사례와 함께 아래 실행 이력 및 `ACCEPTANCE.md`에 업데이트한다. 문서 렌더 도구는 이 환경에 포함된 LibreOffice 부재로 PNG 검토가 불가능했다. DOCX의 문단·표 텍스트는 모두 추출해 요구를 대조했으며 원본 문서는 수정하지 않았다.
 
@@ -1679,3 +1679,5 @@ R01/R02의 세부 판정은 회귀 사례와 함께 아래 실행 이력 및 `AC
 ### 공개 페이지 확인 루프 1
 
 배포된 Pages의 실제 WebGL에서 부정 이동과 잠금 조건 명령이 모두 현장 요원을 움직이지 않고 `FAILED`로 종료되는 것을 확인했다. landing page의 배너·Windows 링크·테스트 집계는 v0.1.1인데 하단 저작권 문구만 v0.1.0인 표시 불일치가 남아 있어 버전을 맞춘 뒤 Pages를 다시 배포하고 최종 확인한다.
+
+최종 배포 `25c23c6`의 Pages workflow `37111227861`은 성공했다. 재조회한 실제 홈 화면 footer도 v0.1.1로 일치하고, PlayMode/EditMode 집계와 Windows v0.1.1 다운로드 링크가 표시된다. 웹 프로젝트는 [Pages](https://cheonyeon0316.github.io/ai-control-room-game/)와 [실제 WebGL 게임](https://cheonyeon0316.github.io/ai-control-room-game/play/)에서 확인한다. Windows ZIP은 [v0.1.1 Release](https://github.com/cheonyeon0316/ai-control-room-game/releases/tag/v0.1.1)이며 SHA256는 `9df964e0a90656ca09e0863bbbf3d97c474809961e8ce52e2bb2de6623c74beb`이다.
