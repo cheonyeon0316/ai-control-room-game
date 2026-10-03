@@ -10,7 +10,7 @@
 - Windows 빌드: `Builds/ControlRoom/ControlRoom.exe` 생성 PASS. 실제 플레이어가 Boot → Mission_01로 초기화되고 CCTV 4개·NavMesh·Briefing을 준비했으며 시작 오류가 없었다. 기록: `TestResults/player-startup-20261003-174302.log`.
 - WebGL 빌드: `scripts/Build-Web.ps1` PASS. 새 Unity 빌드를 `web/play/`에 생성하고 Pages에 배포했다.
 - 자동 검증 사례: 부정된 한국어/영어 이동 차단, 잠긴 문 조건부 이동 차단, `가져오지 말고 보고` 보존, terminal `OPEN` 후 증거 보존, PURGE 요청 후 취소 보존, 정확한 `삭제 확정` 후 `EVIDENCE_DESTROYED` 대상/원인 기록.
-- 이번 요청서의 전체 Windows 사람 플레이, 물리 키보드·마우스/한글 IME, 사람의 재미 평가는 자동화된 Unity 테스트와 구분하며 **NOT RUN**이다. 공개 Pages 반영 후에는 브라우저 WebGL smoke 결과만 별도로 기록한다.
+- 공개 Pages WebGL smoke 결과는 아래에 별도로 기록했다. 이번 요청서의 전체 Windows 사람 플레이, 물리 키보드·마우스/한글 IME, 사람의 재미 평가는 자동화된 Unity 테스트와 구분하며 **NOT RUN**이다.
 
 2026-10-02 실행 결과:
 
