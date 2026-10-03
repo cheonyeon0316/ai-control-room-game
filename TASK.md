@@ -1675,3 +1675,7 @@ R01/R02의 세부 판정은 회귀 사례와 함께 아래 실행 이력 및 `AC
 실행 `20261003-173749`은 EditMode **96/96 통과**, PlayMode **19개 중 17개 통과 / 실패 2개**다. `동안 대기`의 `안`을 부정으로 오인한 파서 경계와 혼합 문장 `터미널 PURGE`의 목적어 선택 누락을 확인했다. `안` 앞 한글 경계를 제한하고 PURGE의 목적어 위치 fallback을 추가했으며 두 사례를 EditMode/PlayMode 회귀 기준에 포함해 다시 실행한다.
 
 최종 실행 `20261003-174042`에서 EditMode **97/97**, PlayMode **19/19**(실패·skip·inconclusive 0), Windows 빌드 및 실제 player 시작 초기화가 통과했다. WebGL 빌드도 생성됐다. `web/assets/acceptance.json`은 이번 Unity XML의 정확한 test case 이름/상태/개수로 다시 생성한다. 물리 입력과 전체 Windows 사람 플레이는 실행하지 않았으므로 PASS로 표시하지 않는다.
+
+### 공개 페이지 확인 루프 1
+
+배포된 Pages의 실제 WebGL에서 부정 이동과 잠금 조건 명령이 모두 현장 요원을 움직이지 않고 `FAILED`로 종료되는 것을 확인했다. landing page의 배너·Windows 링크·테스트 집계는 v0.1.1인데 하단 저작권 문구만 v0.1.0인 표시 불일치가 남아 있어 버전을 맞춘 뒤 Pages를 다시 배포하고 최종 확인한다.
