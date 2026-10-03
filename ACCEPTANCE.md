@@ -18,7 +18,8 @@
 - `MissionWorld`가 생성된 바닥·벽 타일을 실제 구역 재질로 읽어 NavMesh를 그대로 유지한다. `UIManager`는 명령 입력·담당자 선택·전송 프레임, 색상별 응답 아이콘, 상태 행에 맞춰 움직이는 현장 요원 초상, 위험 상승 VFX를 사용한다. 브리핑에는 요원·경비 시트를 표시한다.
 - 테스트 HUD/카메라/결과 캡처: `TestResults/runs/20261003-211949/control-room.png`, `cam-01.png`, `mission-result.png`.
 - Windows v0.1.2 빌드 및 실제 플레이어 시작: PASS. Boot → Mission_01, CCTV 4개, NavMesh, Briefing, 시작 오류 0. 재검증 로그 `TestResults/player-startup-20261003-212907.log`.
-- WebGL v0.1.2 빌드: `scripts/Build-Web.ps1` PASS. 실제 빌드 파일은 `web/play/Build/`에 있으며 결과를 Pages smoke 후 이 절에 덧붙인다.
+- WebGL v0.1.2 빌드: `scripts/Build-Web.ps1` PASS. 공개 Pages workflow **37123247495** 성공. 브라우저에서 작전 시작 후 한국어 `메인 복도로 이동해` 명령의 `COMPLETED` 응답을 확인했다. [Pages](https://cheonyeon0316.github.io/ai-control-room-game/) · [실제 WebGL 게임](https://cheonyeon0316.github.io/ai-control-room-game/play/).
+- Windows v0.1.2 릴리스: [GitHub Release](https://github.com/cheonyeon0316/ai-control-room-game/releases/tag/v0.1.2)의 `ControlRoom-Windows.zip` 다운로드 주소에 HTTP 200을 확인했다. 로컬 ZIP과 공개 asset SHA-256은 `461a7c5c98289cbfad3901ab9923e83aab23402360e1031f591a7ec98c873e0d`로 일치한다.
 
 2026-10-02 실행 결과:
 
