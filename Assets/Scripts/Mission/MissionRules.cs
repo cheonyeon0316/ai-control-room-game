@@ -49,7 +49,9 @@ namespace ControlRoom
         }
 
         public void Caught() => Fail("CAUGHT: 현장 요원이 체포되었습니다.");
-        public void DestroyCriticalEvidence() => Fail("EVIDENCE_DESTROYED: 핵심 증거가 파괴되었습니다.");
+        public void DestroyCriticalEvidence() => DestroyCriticalEvidence("UNKNOWN", "원인 미상");
+        public void DestroyCriticalEvidence(string targetId, string cause) =>
+            Fail("EVIDENCE_DESTROYED: 대상=" + (targetId ?? "UNKNOWN") + "; 원인=" + (cause ?? "원인 미상"));
         public void LoseObjective() => Fail("OBJECTIVE_LOST: 핵심 목표 달성이 불가능해졌습니다.");
 
         public void AddRisk(float amount)

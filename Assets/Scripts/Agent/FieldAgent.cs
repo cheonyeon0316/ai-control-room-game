@@ -20,7 +20,8 @@ namespace ControlRoom
         public Func<bool> CanAct;
         public Func<bool> IsPaused;
         public Func<string> EvidenceTimestamp;
-        public Action OnUsbAcquired, OnExitReached, OnEvidenceDestroyed;
+        public Action OnUsbAcquired, OnExitReached;
+        public Action<string, string> OnEvidenceDestroyed;
         public Action<float> OnRisk;
         public Action<EvidenceRecord> OnEvidence;
         public Transform Visual;
@@ -129,9 +130,10 @@ namespace ControlRoom
                     case CommandAction.INSPECT:
                     case CommandAction.PICKUP:
                     case CommandAction.OPEN:
+                    case CommandAction.PURGE:
                         if (!TryLocalObject(step.objectId, out WorldObject obj)) break;
-                        if (step.action == CommandAction.OPEN && obj.Record.Kind == "TERMINAL" && restrictions.Contains("DO_NOT_DESTROY"))
-                        { Fail("증거를 파괴하지 말라는 제한 때문에 터미널의 삭제 작업을 중단했습니다."); break; }
+                        if (step.action == CommandAction.PURGE && !restrictions.Contains("PURGE_CONFIRMED"))
+                        { Fail("PURGE는 삭제 대상과 결과를 안내한 뒤 별도로 확정해야 합니다."); break; }
                         if (step.action == CommandAction.PICKUP && obj.Record.Kind == "USB" && !world.Objects["LAB_CABINET"].IsOpen)
                         { Fail("USB는 잠긴 캐비닛 안에 있습니다. 출처를 검증하여 코드를 확인하고 열어 주세요."); break; }
                         yield return MoveTo(obj.StandPoint, restrictions, version);
@@ -472,7 +474,7 @@ namespace ControlRoom
                             ? "캐비닛은 열려 있고 내부에 회수할 USB가 보이지 않습니다."
                             : "캐비닛은 잠겨 있습니다. 내부에 회수할 USB는 확인되지 않습니다.";
                         break;
-                    case "TERMINAL": LastMessage = "증거 보관 터미널입니다. OPEN은 기록 영구 삭제(PURGE)를 실행합니다. 열면 핵심 증거가 파괴되어 임무가 실패합니다."; break;
+                    case "TERMINAL": LastMessage = "증거 보관 시스템\n감사 증거: 보존 중\nPURGE는 대상과 삭제 결과를 확인한 뒤 별도로 확정해야 합니다."; break;
                     case "DESK": LastMessage = InspectDesk(obj); break;
                     case "DOOR": LastMessage = obj.Record.Label + (obj.IsOpen ? "은 열려 있습니다." : "은 닫혀 있습니다. 어떤 문을 열지 명확히 지시해 주세요."); break;
                     case "USB": LastMessage = "기밀 데이터 USB입니다. 잠금 캐비닛을 열고 회수할 수 있습니다."; break;
@@ -495,9 +497,7 @@ namespace ControlRoom
             {
                 if (obj.Record.Kind == "TERMINAL")
                 {
-                    LastMessage = "터미널의 PURGE가 실행되어 핵심 증거가 파괴되었습니다.";
-                    obj.Record.IsAvailable = false;
-                    OnEvidenceDestroyed?.Invoke();
+                    LastMessage = "증거 보관 화면을 열었습니다. 감사 증거는 보존 중입니다. 삭제하려면 PURGE를 요청하고 별도 확인을 완료하세요.";
                     return;
                 }
                 if (obj.Record.Kind != "DOOR" && obj.Record.Kind != "CABINET")
@@ -511,6 +511,14 @@ namespace ControlRoom
                 LastMessage = obj.Record.Label + "을 열었습니다.";
                 if (obj.Record.Kind == "CABINET") LastMessage += " 기밀 USB를 확인했습니다.";
                 OnRisk?.Invoke(obj.Record.Id == "STORAGE_DOOR" ? 12 : 2);
+            }
+            if (action == CommandAction.PURGE)
+            {
+                if (obj.Record.Kind != "TERMINAL") { Fail("PURGE는 증거 보관 터미널에서만 사용할 수 있습니다."); return; }
+                const string cause = "사용자가 삭제 대상을 확인하고 PURGE를 별도 확정해 감사 증거를 영구 삭제함";
+                LastMessage = "EVIDENCE_DESTROYED: 대상=" + obj.Record.Id + "; 원인=" + cause;
+                obj.Record.IsAvailable = false;
+                OnEvidenceDestroyed?.Invoke(obj.Record.Id, cause);
             }
         }
 

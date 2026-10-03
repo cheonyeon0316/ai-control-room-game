@@ -366,10 +366,41 @@ namespace ControlRoom.Tests
             yield return Send("창고로 이동해");
             yield return Send("서버실로 이동해");
             yield return Send("터미널 확인해");
-            Assert.IsTrue(game.Commands.LastResponse.Contains("PURGE"));
-            yield return Send("터미널 열어", CommandTarget.FIELD_AGENT, false);
+            Assert.IsTrue(game.Commands.LastResponse.Contains("보존 중"));
+            yield return Send("터미널 열어");
+            Assert.AreEqual(MissionState.Playing, game.Rules.State, "Opening the terminal must show guidance and preserve evidence.");
+            Assert.IsTrue(game.World.Objects["TERMINAL"].Record.IsAvailable);
+            yield return Send("터미널 삭제해", CommandTarget.FIELD_AGENT, false);
+            Assert.AreEqual(CommandStatus.NEEDS_CLARIFICATION, game.Commands.LastStatus);
+            Assert.AreEqual(MissionState.Playing, game.Rules.State, "A purge request alone must not destroy evidence.");
+            Assert.IsTrue(game.World.Objects["TERMINAL"].Record.IsAvailable);
+            yield return Send("취소", CommandTarget.FIELD_AGENT, false);
+            Assert.AreEqual(CommandStatus.COMPLETED, game.Commands.LastStatus);
+            Assert.AreEqual(MissionState.Playing, game.Rules.State);
+            Assert.IsTrue(game.World.Objects["TERMINAL"].Record.IsAvailable, "Cancellation must preserve evidence.");
+            yield return Send("터미널 PURGE", CommandTarget.FIELD_AGENT, false);
+            Assert.AreEqual(CommandStatus.NEEDS_CLARIFICATION, game.Commands.LastStatus);
+            yield return Send("삭제 확정", CommandTarget.FIELD_AGENT, false);
             Assert.AreEqual(MissionState.Failure, game.Rules.State);
-            Assert.IsNotEmpty(game.Rules.FailureReason);
+            StringAssert.Contains("대상=TERMINAL", game.Rules.FailureReason);
+            StringAssert.Contains("별도 확정", game.Rules.FailureReason);
+            Assert.IsFalse(game.World.Objects["TERMINAL"].Record.IsAvailable);
+            StringAssert.Contains("대상=TERMINAL", game.Commands.LastResponse);
+        }
+
+        [UnityTest]
+        public IEnumerator Task027_NegatedOrUnsupportedConditionalMoveDoesNotMoveAgent()
+        {
+            game.Hud.StartButton.onClick.Invoke();
+            Vector3 start = game.World.Agent.transform.position;
+            yield return Send("연구실로 이동하지 마", CommandTarget.FIELD_AGENT, false);
+            Assert.AreEqual(CommandStatus.FAILED, game.Commands.LastStatus);
+            Assert.AreEqual(start, game.World.Agent.transform.position);
+            Assert.AreEqual(MissionState.Playing, game.Rules.State);
+            yield return Send("문이 잠겨 있으면 연구실로 이동해", CommandTarget.FIELD_AGENT, false);
+            Assert.AreEqual(CommandStatus.FAILED, game.Commands.LastStatus);
+            Assert.AreEqual(start, game.World.Agent.transform.position);
+            Assert.AreEqual(MissionState.Playing, game.Rules.State);
         }
 
         [UnityTest]

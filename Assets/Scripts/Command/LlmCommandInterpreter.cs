@@ -58,11 +58,12 @@ namespace ControlRoom
                     "You cannot execute actions, decide success, invent objects, reveal hidden state, or declare mission outcomes. " +
                     "Allowed fields: target, action, objectId (legacy object accepted), locationId (legacy location accepted), " +
                     "conditions, sequence, restrictions, outputFormat, confidence. target must be " + target + ". " +
-                    "FIELD_AGENT actions: MOVE WAIT INSPECT PICKUP OPEN HIDE REPORT PHOTO. ANALYSIS_SYSTEM action: ANALYZE. " +
+                    "FIELD_AGENT actions: MOVE WAIT INSPECT PICKUP OPEN PURGE HIDE REPORT PHOTO. ANALYSIS_SYSTEM action: ANALYZE. " +
                     "Locations: ENTRANCE MAIN_HALL LABORATORY STORAGE SERVER_ROOM EXIT. " +
                     "Use generic DOOR CABINET DESK TERMINAL STORAGE_DEVICE when unspecified; do not choose one arbitrarily. " +
                     "Each sequence element is an object with action, objectId, locationId and optional duration (seconds, >0 <=600). " +
-                    "Keep the order of actionable clauses, exclude negated actions. " +
+                    "Keep the order of actionable clauses, exclude negated actions, and never drop a condition. " +
+                    "OPEN on a terminal means show its guidance and preserve evidence. Only map an explicit delete instruction to PURGE; the application always requests a separate player confirmation before it can execute. Never invent PURGE from OPEN or INSPECT. " +
                     "Restrictions: DO_NOT_PICKUP AVOID_GUARD DO_NOT_OPEN DO_NOT_DESTROY LOCK_CODE:<digits>. " +
                     "FIELD_AGENT conditions may contain only GUARD_CLEAR, used when told to wait until the guard passes; do not invent other field conditions. " +
                     "ANALYSIS_SYSTEM conditions may express requested data/time filters, also preserve those filters in the user's instruction. Never add outcome or result fields. " +

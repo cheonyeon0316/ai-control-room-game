@@ -10,6 +10,7 @@ namespace ControlRoom
         // Verb matches preserve the player's order. Their subjects are read only from their own clause.
         static readonly Regex Verbs = new Regex(
             @"(?<pickup>\bpick\s*(?:it\s+|them\s+)?up\b|\bcollect\b|\bretrieve\b|가져(?:와|오|가)|집어|주워|획득|회수|챙겨)|" +
+            @"(?<purge>\bpurg(?:e)?\b|\bdestroy\b|\bdelete\b|삭제|파괴|지워|폐기)|" +
             @"(?<photo>\bphotograph\b|\btake\s+(?:a\s+)?photo\b|사진\s*(?:을\s*)?(?:찍|촬영)|촬영)|" +
             @"(?<open>\bopen\b|\bunlock\b|열어|열고|열면|열기|개방|잠금\s*해제)|" +
             @"(?<inspect>\binspect\b|\bexamine\b|\bcheck\b|확인|조사|살펴|검사)|" +
@@ -40,13 +41,13 @@ namespace ControlRoom
                 return new ParseResult { command = command };
             }
 
+            string safetyError = ValidateNaturalLanguageSafety(prompt, target);
+            if (!string.IsNullOrEmpty(safetyError)) return Fail(safetyError);
             string text = prompt;
             // Removing only complete negative clauses prevents a prohibited verb from becoming a step.
-            text = ExtractRestriction(text, command, @"(?:do\s+not|don['’]t|never)\s+(?:pick\s*(?:it\s+|them\s+)?up|collect|retrieve)(?:(?!\band\b|\bthen\b)[^.;\n])*|(?:가져오|가져가|가져와|집|줍|주워오|획득|회수|챙기)[^.;\n]{0,10}(?:마(?:세요|라)?|말(?:고|아|아줘))", "DO_NOT_PICKUP");
-            text = ExtractRestriction(text, command, @"(?:do\s+not|don['’]t|never)\s+open(?:(?!\band\b|\bthen\b)[^.;\n])*|(?:열지|열지는|개방하지)\s*(?:마|말고)", "DO_NOT_OPEN");
-            text = ExtractRestriction(text, command, @"(?:do\s+not|don['’]t|never)\s+(?:destroy|delete)(?:(?!\band\b|\bthen\b)[^.;\n])*|(?:파괴|삭제)하지\s*(?:마|말고)", "DO_NOT_DESTROY");
-            if (Regex.IsMatch(text, @"\b(?:kill|shoot|attack|hack|teleport|destroy|delete)\b|죽여|쏴|공격|해킹|순간이동|파괴해|삭제해", RegexOptions.IgnoreCase))
-                return Fail("지원하지 않는 행동입니다. 이동, 조사, 획득, 열기, 대기, 숨기, 보고, 사진 촬영을 지시해 주세요.");
+            text = StripSupportedNegativeClauses(text, command);
+            if (Regex.IsMatch(text, @"\b(?:kill|shoot|attack|hack|teleport)\b|죽여|쏴|공격|해킹|순간이동", RegexOptions.IgnoreCase))
+                return Fail("지원하지 않는 행동입니다. 이동, 조사, 획득, 열기, PURGE, 대기, 숨기, 보고, 사진 촬영을 지시해 주세요.");
             if (Regex.IsMatch(prompt, @"경비.*(?:피해|피하|들키지|발각되지|지나가)|\b(?:avoid\s+(?:the\s+)?guard|stealth|undetected)\b", RegexOptions.IgnoreCase))
                 command.restrictions.Add("AVOID_GUARD");
             var code = Regex.Match(prompt, @"(?<!\d)(\d{3,8})\s*(?:로|으로|번)|(?:code|암호|비밀번호)\s*[:=]?\s*(\d{3,8})(?!\d)", RegexOptions.IgnoreCase);
@@ -65,6 +66,7 @@ namespace ControlRoom
                 string after = text.Substring(match.Index + match.Length, nextVerb - match.Index - match.Length);
                 bool english = Regex.IsMatch(match.Value, @"^[a-z]", RegexOptions.IgnoreCase);
                 string subject = english ? after : before;
+                if (action == CommandAction.PURGE && english && string.IsNullOrEmpty(CommandVocabulary.FindObject(subject))) subject = before;
                 string location = CommandVocabulary.FindLocation(subject);
                 string obj = CommandVocabulary.FindObject(subject);
                 if (action == CommandAction.MOVE && !string.IsNullOrEmpty(obj) && obj.EndsWith("DOOR", StringComparison.Ordinal) && string.IsNullOrEmpty(location)) action = CommandAction.OPEN;
@@ -105,9 +107,46 @@ namespace ControlRoom
             return regex.Replace(text, " ");
         }
 
+        /// <summary>Rejects field-agent clauses whose negation or condition cannot be represented exactly.</summary>
+        public static string ValidateNaturalLanguageSafety(string prompt, CommandTarget target)
+        {
+            if (target != CommandTarget.FIELD_AGENT || string.IsNullOrWhiteSpace(prompt)) return "";
+            if (prompt.TrimStart().StartsWith("{", StringComparison.Ordinal)) return "";
+            string remaining = StripSupportedNegativeClauses(prompt, null);
+            string conditionText = Regex.Replace(remaining,
+                @"경비[^,.;\n]{0,24}?(?:지나가면|없으면|지나간\s*후)|\bafter\s+(?:the\s+)?guard(?:\s+(?:passes?|leaves?|is\s+clear|clears?))?|\bwhen\s+(?:the\s+)?guard[^,.;\n]{0,24}?(?:leaves?|passes?|is\s+clear|clears?)",
+                " ", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            if (Regex.IsMatch(conditionText,
+                @"\b(?:if|when|unless|provided\s+that|only\s+if|as\s+long\s+as|after)\b|(?:라면|이면|으면|면)(?=\s|[,.;!?]|$)|(?:경우에|한\s*경우)",
+                RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                return "현장 요원이 확인할 수 없는 조건이 포함되어 실행하지 않았습니다. 조건을 제거하거나 경비가 지나가는 조건만 지정해 주세요.";
+            if (Regex.IsMatch(remaining,
+                @"\b(?:do\s+not|don't|don’t|never|cannot|can't)\b|(?<![가-힣])안\s*(?:이동|움직|가|들어가|열|가져|보고|확인|조사|주워|회수|대기|숨)|(?:이동|움직|가|들어가|열|확인|조사|보고|대기|숨|촬영|찍|주워|회수|획득|챙기|가져오)[가-힣\s]{0,6}(?:하지\s*(?:마|말고|말라)|지\s*(?:마|말고|말라)|않(?:아|고|도록)?|못)",
+                RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+                return "부정된 행동을 안전하게 분리하지 못해 실행하지 않았습니다. 금지할 행동과 원하는 행동을 나누어 다시 입력해 주세요.";
+            return "";
+        }
+
+        static string StripSupportedNegativeClauses(string text, Command command)
+        {
+            text = Strip(text, command, @"(?:do\s+not|don['’]t|never)\s+(?:pick\s*(?:it\s+|them\s+)?up|collect|retrieve)(?:(?!\band\b|\bthen\b)[^.;\n])*|(?:가져오|가져가|가져와|집|줍|주워오|획득|회수|챙기)[^.;\n]{0,10}(?:마(?:세요|라)?|말(?:고|아|아줘))", "DO_NOT_PICKUP");
+            text = Strip(text, command, @"(?:do\s+not|don['’]t|never)\s+open(?:(?!\band\b|\bthen\b)[^.;\n])*|(?:열지|열지는|개방하지)\s*(?:마|말고)", "DO_NOT_OPEN");
+            text = Strip(text, command, @"(?:do\s+not|don['’]t|never)\s+(?:destroy|delete|purge)(?:(?!\band\b|\bthen\b)[^.;\n])*|(?:파괴|삭제|지우|폐기)하지\s*(?:마|말고)|purge\s+하지\s*(?:마|말고)", "DO_NOT_DESTROY");
+            return text;
+        }
+
+        static string Strip(string text, Command command, string pattern, string restriction)
+        {
+            var regex = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+            if (!regex.IsMatch(text)) return text;
+            if (command != null && !command.restrictions.Contains(restriction)) command.restrictions.Add(restriction);
+            return regex.Replace(text, " ");
+        }
+
         static CommandAction ActionOf(Match match)
         {
             if (match.Groups["pickup"].Success) return CommandAction.PICKUP;
+            if (match.Groups["purge"].Success) return CommandAction.PURGE;
             if (match.Groups["photo"].Success) return CommandAction.PHOTO;
             if (match.Groups["open"].Success) return CommandAction.OPEN;
             if (match.Groups["inspect"].Success) return CommandAction.INSPECT;

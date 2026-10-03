@@ -30,6 +30,10 @@ namespace ControlRoom.Tests
         [TestCase("Wait 5 seconds", CommandAction.WAIT, "", "")]
         [TestCase("Report surroundings", CommandAction.REPORT, "", "")]
         [TestCase("Take a photo of desk", CommandAction.PHOTO, "", "DESK")]
+        [TestCase("터미널 열어", CommandAction.OPEN, "", "TERMINAL")]
+        [TestCase("터미널 삭제해", CommandAction.PURGE, "", "TERMINAL")]
+        [TestCase("Purge terminal", CommandAction.PURGE, "", "TERMINAL")]
+        [TestCase("터미널 PURGE", CommandAction.PURGE, "", "TERMINAL")]
         public void AuthoredSentencesBecomeStructuredSteps(string prompt, CommandAction action, string location, string obj)
         {
             ParseResult result = new RuleCommandParser().Parse(prompt, CommandTarget.FIELD_AGENT);
@@ -37,6 +41,34 @@ namespace ControlRoom.Tests
             Assert.That(result.command.action, Is.EqualTo(action));
             Assert.That(result.command.sequence[0].locationId, Is.EqualTo(location));
             Assert.That(result.command.sequence[0].objectId, Is.EqualTo(obj));
+        }
+
+        [TestCase("연구실로 이동하지 마")]
+        [TestCase("Don't move to the laboratory")]
+        public void NegatedMovementIsRejectedWithoutProducingAMove(string prompt)
+        {
+            ParseResult result = new RuleCommandParser().Parse(prompt, CommandTarget.FIELD_AGENT);
+            Assert.That(result.Success, Is.False);
+            Assert.That(result.error, Does.Contain("부정된 행동"));
+        }
+
+        [TestCase("문이 잠겨 있으면 연구실로 이동해")]
+        [TestCase("Move to the laboratory if the door is locked")]
+        public void UnsupportedFieldConditionsAreRejectedByTheParser(string prompt)
+        {
+            ParseResult result = new RuleCommandParser().Parse(prompt, CommandTarget.FIELD_AGENT);
+            Assert.That(result.Success, Is.False);
+            Assert.That(result.error, Does.Contain("조건"));
+        }
+
+        [Test]
+        public void NegatedPickupDoesNotEraseFollowingReport()
+        {
+            ParseResult result = new RuleCommandParser().Parse("USB는 가져오지 말고 주변 보고해", CommandTarget.FIELD_AGENT);
+            Assert.That(result.Success, Is.True, result.error);
+            Assert.That(result.command.sequence.Count, Is.EqualTo(1));
+            Assert.That(result.command.sequence[0].action, Is.EqualTo(CommandAction.REPORT));
+            Assert.That(result.command.restrictions, Does.Contain("DO_NOT_PICKUP"));
         }
 
         [Test]
@@ -156,6 +188,23 @@ namespace ControlRoom.Tests
             Assert.That(new CommandValidator().Validate(command, context).code, Is.EqualTo("INVALID_ACTION"));
         }
 
+        [Test]
+        public void PurgeCanOnlyTargetKnownTerminalAtTheCurrentLocation()
+        {
+            var context = new WorldContext { locationId = "SERVER_ROOM" };
+            context.objects.Add(new ObjectRecord("TERMINAL", "증거 보관 터미널", "SERVER_ROOM", "TERMINAL"));
+            context.objects.Add(new ObjectRecord("SERVER_DESK", "책상", "SERVER_ROOM", "DESK"));
+            var parser = new RuleCommandParser();
+            var validator = new CommandValidator();
+            var purge = parser.Parse("터미널 삭제해", CommandTarget.FIELD_AGENT).command;
+            Assert.That(validator.Validate(purge, context).valid, Is.True);
+            purge.sequence[0].objectId = "SERVER_DESK";
+            Assert.That(validator.Validate(purge, context).code, Is.EqualTo("INVALID_OBJECT_ACTION"));
+            purge.sequence[0].objectId = "TERMINAL";
+            context.locationId = "MAIN_HALL";
+            Assert.That(validator.Validate(purge, context).code, Is.EqualTo("OBJECT_NOT_IN_LOCATION"));
+        }
+
         [TestCase("USB_SECURED")]
         [TestCase("AFTER_22:00")]
         [TestCase("")]
@@ -194,6 +243,8 @@ namespace ControlRoom.Tests
             Assert.That(result.command.sequence[0].locationId, Is.EqualTo("LABORATORY"));
             Assert.That(result.command.sequence[1].objectId, Is.EqualTo("DESK"));
             Assert.That(CommandJsonCodec.Parse(CommandJsonCodec.Serialize(result.command)).Success, Is.True);
+            var purge = new Command { target = CommandTarget.FIELD_AGENT, action = CommandAction.PURGE, objectId = "TERMINAL", locationId = "SERVER_ROOM" };
+            Assert.That(CommandJsonCodec.Parse(CommandJsonCodec.Serialize(purge)).command.action, Is.EqualTo(CommandAction.PURGE));
         }
 
         [TestCase("{\"target\":\"FIELD_AGENT\",\"action\":\"TELEPORT\"}")]

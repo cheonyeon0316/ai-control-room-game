@@ -1,18 +1,22 @@
 {
   "counts": {
-    "total": 105,
-    "passed": 105,
+    "total": 116,
+    "passed": 116,
     "failed": 0,
     "skipped": 0
   },
   "editMode": {
     "counts": {
-      "total": 87,
-      "passed": 87,
+      "total": 97,
+      "passed": 97,
       "failed": 0,
       "skipped": 0
     },
     "cases": [
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.AllSpecFailureConditionsAreTerminal(\"TIMEOUT\")",
+        "status": "Passed"
+      },
       {
         "name": "ControlRoom.Tests.AnalysisMissionTests.AllSpecFailureConditionsAreTerminal(\"CAUGHT\")",
         "status": "Passed"
@@ -23,10 +27,6 @@
       },
       {
         "name": "ControlRoom.Tests.AnalysisMissionTests.AllSpecFailureConditionsAreTerminal(\"OBJECTIVE_LOST\")",
-        "status": "Passed"
-      },
-      {
-        "name": "ControlRoom.Tests.AnalysisMissionTests.AllSpecFailureConditionsAreTerminal(\"TIMEOUT\")",
         "status": "Passed"
       },
       {
@@ -114,11 +114,11 @@
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"22시 이후 2층 CCTV 확인\")",
+        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"화성 생명체를 알려줘\")",
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"25시 이후 출입 로그\")",
+        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"CAM 9 영상 찾아\")",
         "status": "Passed"
       },
       {
@@ -126,15 +126,15 @@
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"화성 생명체를 알려줘\")",
-        "status": "Passed"
-      },
-      {
         "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"회의실 출입 기록 알려줘\")",
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"CAM 9 영상 찾아\")",
+        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"25시 이후 출입 로그\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.AnalysisMissionTests.UnknownQueriesReturnUncertainty(\"22시 이후 2층 CCTV 확인\")",
         "status": "Passed"
       },
       {
@@ -146,7 +146,7 @@
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"5초 대기해\",WAIT,\"\",\"\")",
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"연구실로 이동해\",MOVE,\"LABORATORY\",\"\")",
         "status": "Passed"
       },
       {
@@ -154,7 +154,7 @@
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"문 열어\",OPEN,\"\",\"DOOR\")",
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"창고로 이동해\",MOVE,\"STORAGE\",\"\")",
         "status": "Passed"
       },
       {
@@ -162,39 +162,7 @@
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"숨어\",HIDE,\"\",\"\")",
-        "status": "Passed"
-      },
-      {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"연구실 문 열어\",OPEN,\"LABORATORY\",\"LAB_DOOR\")",
-        "status": "Passed"
-      },
-      {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"연구실 캐비닛을 확인해\",INSPECT,\"LABORATORY\",\"LAB_CABINET\")",
-        "status": "Passed"
-      },
-      {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"연구실로 이동해\",MOVE,\"LABORATORY\",\"\")",
-        "status": "Passed"
-      },
-      {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"오른쪽 문으로 들어가\",OPEN,\"\",\"DOOR\")",
-        "status": "Passed"
-      },
-      {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"주변 상황을 보고해\",REPORT,\"\",\"\")",
-        "status": "Passed"
-      },
-      {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"창고로 이동해\",MOVE,\"STORAGE\",\"\")",
-        "status": "Passed"
-      },
-      {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"책상 사진 찍어\",PHOTO,\"\",\"DESK\")",
-        "status": "Passed"
-      },
-      {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"책상을 확인해\",INSPECT,\"\",\"DESK\")",
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"출입구로 이동해\",MOVE,\"ENTRANCE\",\"\")",
         "status": "Passed"
       },
       {
@@ -202,7 +170,15 @@
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"출입구로 이동해\",MOVE,\"ENTRANCE\",\"\")",
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"책상을 확인해\",INSPECT,\"\",\"DESK\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"연구실 캐비닛을 확인해\",INSPECT,\"LABORATORY\",\"LAB_CABINET\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"USB를 가져와\",PICKUP,\"\",\"USB\")",
         "status": "Passed"
       },
       {
@@ -210,7 +186,31 @@
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"Inspect desk\",INSPECT,\"\",\"DESK\")",
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"문 열어\",OPEN,\"\",\"DOOR\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"오른쪽 문으로 들어가\",OPEN,\"\",\"DOOR\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"연구실 문 열어\",OPEN,\"LABORATORY\",\"LAB_DOOR\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"5초 대기해\",WAIT,\"\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"숨어\",HIDE,\"\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"주변 상황을 보고해\",REPORT,\"\",\"\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"책상 사진 찍어\",PHOTO,\"\",\"DESK\")",
         "status": "Passed"
       },
       {
@@ -222,7 +222,15 @@
         "status": "Passed"
       },
       {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"Inspect desk\",INSPECT,\"\",\"DESK\")",
+        "status": "Passed"
+      },
+      {
         "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"Pick up USB\",PICKUP,\"\",\"USB\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"Wait 5 seconds\",WAIT,\"\",\"\")",
         "status": "Passed"
       },
       {
@@ -234,11 +242,19 @@
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"USB를 가져와\",PICKUP,\"\",\"USB\")",
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"터미널 열어\",OPEN,\"\",\"TERMINAL\")",
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"Wait 5 seconds\",WAIT,\"\",\"\")",
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"터미널 삭제해\",PURGE,\"\",\"TERMINAL\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"Purge terminal\",PURGE,\"\",\"TERMINAL\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.AuthoredSentencesBecomeStructuredSteps(\"터미널 PURGE\",PURGE,\"\",\"TERMINAL\")",
         "status": "Passed"
       },
       {
@@ -250,19 +266,19 @@
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.EnglishNegativeDestructionPreservesInspectAndFollowingReport(\"Inspect terminal; do not delete evidence then report surroundings\")",
-        "status": "Passed"
-      },
-      {
         "name": "ControlRoom.Tests.CommandDomainTests.EnglishNegativeDestructionPreservesInspectAndFollowingReport(\"Inspect terminal; don’t destroy evidence and report surroundings\")",
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.EnglishNegativeOpenPreservesFollowingReport(\"Do not open the door then report surroundings\")",
+        "name": "ControlRoom.Tests.CommandDomainTests.EnglishNegativeDestructionPreservesInspectAndFollowingReport(\"Inspect terminal; do not delete evidence then report surroundings\")",
         "status": "Passed"
       },
       {
         "name": "ControlRoom.Tests.CommandDomainTests.EnglishNegativeOpenPreservesFollowingReport(\"Don’t open the door and report surroundings\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.EnglishNegativeOpenPreservesFollowingReport(\"Do not open the door then report surroundings\")",
         "status": "Passed"
       },
       {
@@ -274,11 +290,19 @@
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"ANALYSIS_SYSTEM\\\",\\\"action\\\":\\\"PICKUP\\\"}\")",
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"TELEPORT\\\"}\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":0}\")",
         "status": "Passed"
       },
       {
         "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"0\\\"}\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"MOVE\\\",\\\"success\\\":true}\")",
         "status": "Passed"
       },
       {
@@ -290,23 +314,15 @@
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"MOVE\\\",\\\"restrictions\\\":[\\\"IGNORE_GAME_RULES\\\"]}\")",
-        "status": "Passed"
-      },
-      {
-        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"MOVE\\\",\\\"success\\\":true}\")",
-        "status": "Passed"
-      },
-      {
-        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"TELEPORT\\\"}\")",
-        "status": "Passed"
-      },
-      {
         "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"WAIT\\\",\\\"duration\\\":-1}\")",
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":0}\")",
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"FIELD_AGENT\\\",\\\"action\\\":\\\"MOVE\\\",\\\"restrictions\\\":[\\\"IGNORE_GAME_RULES\\\"]}\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.JsonRejectsUntrustedAndMalformedSchema(\"{\\\"target\\\":\\\"ANALYSIS_SYSTEM\\\",\\\"action\\\":\\\"PICKUP\\\"}\")",
         "status": "Passed"
       },
       {
@@ -315,6 +331,22 @@
       },
       {
         "name": "ControlRoom.Tests.CommandDomainTests.LlmResponseHasNoAuthorityToDeclareSuccessOrChangeTarget",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.NegatedMovementIsRejectedWithoutProducingAMove(\"연구실로 이동하지 마\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.NegatedMovementIsRejectedWithoutProducingAMove(\"Don't move to the laboratory\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.NegatedPickupDoesNotEraseFollowingReport",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.PurgeCanOnlyTargetKnownTerminalAtTheCurrentLocation",
         "status": "Passed"
       },
       {
@@ -350,7 +382,15 @@
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.UnsupportedFieldConditionsFailBeforeAnyWorldAction(\"\")",
+        "name": "ControlRoom.Tests.CommandDomainTests.UnsupportedFieldConditionsAreRejectedByTheParser(\"문이 잠겨 있으면 연구실로 이동해\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.UnsupportedFieldConditionsAreRejectedByTheParser(\"Move to the laboratory if the door is locked\")",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.CommandDomainTests.UnsupportedFieldConditionsFailBeforeAnyWorldAction(\"USB_SECURED\")",
         "status": "Passed"
       },
       {
@@ -358,15 +398,15 @@
         "status": "Passed"
       },
       {
-        "name": "ControlRoom.Tests.CommandDomainTests.UnsupportedFieldConditionsFailBeforeAnyWorldAction(\"USB_SECURED\")",
+        "name": "ControlRoom.Tests.CommandDomainTests.UnsupportedFieldConditionsFailBeforeAnyWorldAction(\"\")",
         "status": "Passed"
       }
     ]
   },
   "playMode": {
     "counts": {
-      "total": 18,
-      "passed": 18,
+      "total": 19,
+      "passed": 19,
       "failed": 0,
       "skipped": 0
     },
@@ -441,6 +481,10 @@
       },
       {
         "name": "ControlRoom.Tests.PrototypeAcceptanceTests.Task020_ReferenceResolution_UiControlsStayInsideTheirPanels",
+        "status": "Passed"
+      },
+      {
+        "name": "ControlRoom.Tests.PrototypeAcceptanceTests.Task027_NegatedOrUnsupportedConditionalMoveDoesNotMoveAgent",
         "status": "Passed"
       }
     ]

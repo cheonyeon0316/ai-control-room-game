@@ -2,7 +2,15 @@
 
 기준 문서: `AI_관제_지휘_게임_SPEC_v0.1.md` §32 / `TASK.md` TASK-026.
 
-현재 상태: **AC-01~AC-12 자동 acceptance PASS**. 실제 Unity 검사, Windows 빌드, 실행 파일 초기화 검증을 완료했다.
+현재 상태: **AC-01~AC-12 자동 acceptance PASS**. 2026-10-03 최신 실행은 실제 Unity EditMode 97/97, PlayMode 19/19와 Windows 빌드·실행 초기화까지 통과했다. R01/R02의 부정·조건문 안전 처리와 터미널 PURGE 별도 확인 회귀를 추가했다.
+
+## 2026-10-03 플레이 개선 검증
+
+- 실제 Unity 실행: `TestResults/runs/20261003-174042/` — EditMode **97/97**, PlayMode **19/19**, 실패·skip·inconclusive 0.
+- Windows 빌드: `Builds/ControlRoom/ControlRoom.exe` 생성 PASS. 실제 플레이어가 Boot → Mission_01로 초기화되고 CCTV 4개·NavMesh·Briefing을 준비했으며 시작 오류가 없었다. 기록: `TestResults/player-startup-20261003-174302.log`.
+- WebGL 빌드: `scripts/Build-Web.ps1` PASS. 새 Unity 빌드가 `web/play/`에 생성됐다.
+- 자동 검증 사례: 부정된 한국어/영어 이동 차단, 잠긴 문 조건부 이동 차단, `가져오지 말고 보고` 보존, terminal `OPEN` 후 증거 보존, PURGE 요청 후 취소 보존, 정확한 `삭제 확정` 후 `EVIDENCE_DESTROYED` 대상/원인 기록.
+- 이번 요청서의 전체 Windows 사람 플레이, 물리 키보드·마우스/한글 IME, 사람의 재미 평가는 자동화된 Unity 테스트와 구분하며 **NOT RUN**이다. 공개 Pages 반영 후에는 브라우저 WebGL smoke 결과만 별도로 기록한다.
 
 2026-10-02 실행 결과:
 
@@ -18,7 +26,7 @@
 |---|---|---|
 | AC-01 | 4 Camera/RT/RawImage, 고유 픽셀·영역, 확대, 이동 후 영상 변화, 실제 HUD 오류 색 검사 | PASS |
 | AC-02 | 한국어 자연어를 InputField + Dropdown + Send의 실제 uGUI 이벤트로 제출 | PASS |
-| AC-03 | 한국어/영어 파서, CommandStep 순서, 엄격한 JSON·제약·LLM 응답 schema | PASS |
+| AC-03 | 한국어/영어 파서, 부정·미지원 조건 fail-closed, CommandStep 순서, 엄격한 JSON·제약·LLM 응답 schema | PASS |
 | AC-04 | 실제 NavMesh·Transform 이동, 8행동, 물체·증거 상태 변경, 실제 촬영·사진 열기 | PASS |
 | AC-05 | 두 문 후보 → 재질문 → 기존 OPEN 문맥 복원, 분석 교차 실행에도 기록 보존 | PASS |
 | AC-06 | 담당자 선택 → 자연어 분석 → 실제 제작 자료 필터 | PASS |
@@ -26,7 +34,7 @@
 | AC-08 | 3일 전 서버실 위치 추정과 실제 연구실 USB의 불일치 | PASS |
 | AC-09 | 근거 날짜 → 최신 반대 자료 → 캐비닛/암호 교차 검증 | PASS |
 | AC-10 | 600초, Briefing/Pause/Result 정지, 실제 이동 정지·재개, 시간 초과 실패 | PASS |
-| AC-11 | USB+Exit 성공, 체포·시간·실제 터미널 파괴 실패, 경비 거리·시야각·벽 차폐 | PASS |
+| AC-11 | USB+Exit 성공, 체포·시간·명시 확인된 terminal PURGE 실패(대상/원인 기록), 경비 거리·시야각·벽 차폐 | PASS |
 | AC-12 | 관찰·명령·재질문·위임·검증·회수·탈출·결과, 경비 활성, 재시작 후 실제 입력 | PASS |
 
 ### 실패 → 수정 → 재검증
@@ -39,6 +47,9 @@
 | `20261002-224815` | EditMode 87 PASS, PlayMode 18 PASS, 빌드·실행 초기화 PASS | 최종 동일 suite 재검증 완료 |
 | `20261002-232031` | EditMode 87 PASS, PlayMode 18 PASS, 빌드·실행 초기화 PASS | Noto Sans CJK KR 포함 후 재검증 |
 | `20261002-233403` | EditMode 87 PASS, PlayMode 18 PASS, 빌드·실행 초기화 PASS | 타이머 실제 mesh 생성·일시정지 표시 검사 추가 후 통과 |
+| `20261003-173618` | EditMode 95 PASS / 1 FAIL | PURGE의 방 범위 거절 테스트가 실제 `OBJECT_NOT_IN_LOCATION` 대신 `OUT_OF_REACH`를 기대해 assertion 수정 |
+| `20261003-173749` | EditMode 96 PASS, PlayMode 17 PASS / 2 FAIL | `동안`의 `안` 오탐과 `터미널 PURGE` 혼합 문장 목적어 누락 수정 |
+| `20261003-174042` | EditMode 97 PASS, PlayMode 19 PASS, Windows 빌드·초기화 PASS | 두 경계 수정 후 전체 acceptance 완료 |
 
 SPEC 기준의 각 수정 요구는 TASK 루프 0~6에 기록되어 있다. 최종 실제 `control-room.png`, `field-photo.png`, `mission-result.png`를 검토하여 CCTV 구분·요원/경비 실루엣·캐비닛 사진·결과 표시를 확인했다.
 
@@ -58,6 +69,6 @@ F01~F06 재미·학습 체감은 사람의 플레이 평가가 필요합니다. 
 
 ### 공개 웹 배포 확인
 
-2026-10-02 최종 Unity WebGL 빌드와 GitHub Pages 배포가 성공했다. 실제 공개 URL `https://cheonyeon0316.github.io/ai-control-room-game/play/`에서 게임 로딩, 한글 Briefing, 4 CCTV, 타이머 표시, 브라우저 입력창의 한국어 지시, 실제 요원 이동과 출입 기록 분석 응답을 확인했다. 해당 브라우저 경로의 Console error/warning은 0이다.
+2026-10-02 이전 WebGL 배포는 실제 공개 URL `https://cheonyeon0316.github.io/ai-control-room-game/play/`에서 게임 로딩, 한글 Briefing, 4 CCTV, 타이머 표시, 브라우저 입력창의 한국어 지시, 실제 요원 이동과 출입 기록 분석 응답을 확인했다. 해당 브라우저 경로의 Console error/warning은 0이다.
 
-전체 87 EditMode + 18 PlayMode suite는 Unity Editor에서 실행한 결과다. 공개 WebGL의 전체 미션 완주는 이번 배포 확인 범위에 포함하지 않는다. Windows ZIP은 Release `v0.1.0`에 게시했고 GitHub asset digest와 로컬 SHA256가 일치한다.
+전체 97 EditMode + 19 PlayMode suite는 Unity Editor에서 실행한 결과다. 2026-10-03 WebGL 갱신 배포의 공개 URL smoke는 완료 후 별도로 기록한다. 공개 WebGL의 전체 미션 완주 및 Windows ZIP 전체 사람 플레이는 이번 자동화 검증 범위에 포함하지 않는다. 이전 Windows ZIP은 Release `v0.1.0`에 보존한다.

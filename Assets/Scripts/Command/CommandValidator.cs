@@ -45,13 +45,14 @@ namespace ControlRoom
                 if (!IsFinite(step.duration) || step.duration <= 0 || step.duration > 600) return Fail(command, "INVALID_DURATION", "행동 시간은 0초 초과, 600초 이하이어야 합니다.");
                 if (step.action == CommandAction.PICKUP && command.restrictions.Contains("DO_NOT_PICKUP")) return Fail(command, "RESTRICTION_CONFLICT", "가져오지 말라는 제한과 획득 행동이 충돌합니다.");
                 if (step.action == CommandAction.OPEN && command.restrictions.Contains("DO_NOT_OPEN")) return Fail(command, "RESTRICTION_CONFLICT", "열지 말라는 제한과 열기 행동이 충돌합니다.");
+                if (step.action == CommandAction.PURGE && command.restrictions.Contains("DO_NOT_DESTROY")) return Fail(command, "RESTRICTION_CONFLICT", "증거를 삭제하지 말라는 제한과 PURGE 행동이 충돌합니다.");
                 if (step.action == CommandAction.MOVE)
                 {
                     if (string.IsNullOrEmpty(step.locationId)) return Fail(command, "MISSING_LOCATION", "어느 장소로 이동할까요?");
                     projectedLocation = step.locationId == "EXIT" ? "ENTRANCE" : step.locationId;
                     continue;
                 }
-                bool needsObject = step.action == CommandAction.INSPECT || step.action == CommandAction.OPEN || step.action == CommandAction.PICKUP;
+                bool needsObject = step.action == CommandAction.INSPECT || step.action == CommandAction.OPEN || step.action == CommandAction.PICKUP || step.action == CommandAction.PURGE;
                 if (needsObject && string.IsNullOrEmpty(step.objectId)) return Fail(command, "MISSING_OBJECT", "어떤 물체를 말씀하시는 건가요?");
                 if (string.IsNullOrEmpty(step.objectId)) continue;
                 string requested = step.objectId.ToUpperInvariant();
@@ -83,10 +84,10 @@ namespace ControlRoom
                 // Doors still require the agent to be on their physical corridor side.
                 if (!string.Equals(selected.LocationId, projectedLocation, StringComparison.OrdinalIgnoreCase))
                     return Fail(command, "OUT_OF_REACH", "먼저 " + selected.LocationId + "로 이동해 주세요.");
-                if (step.action == CommandAction.OPEN && IsTerminal(selected) && command.restrictions.Contains("DO_NOT_DESTROY"))
-                    return Fail(command, "RESTRICTION_CONFLICT", "단말기 실행은 증거를 파괴할 수 있어 해당 제한 조건으로 실행할 수 없습니다.");
                 if (step.action == CommandAction.OPEN && !IsDoor(selected) && !IsCabinet(selected) && !IsTerminal(selected))
                     return Fail(command, "INVALID_OBJECT_ACTION", "이 물체에는 열기 행동을 사용할 수 없습니다.");
+                if (step.action == CommandAction.PURGE && !IsTerminal(selected))
+                    return Fail(command, "INVALID_OBJECT_ACTION", "PURGE는 증거 보관 터미널에서만 사용할 수 있습니다.");
                 if (step.action == CommandAction.PICKUP && !(selected.Kind == "USB" || selected.Kind == "STORAGE_DEVICE" || selected.Kind == "KEYCARD" || selected.Id == "USB" || selected.Id == "KEYCARD"))
                     return Fail(command, "INVALID_OBJECT_ACTION", "이 물체는 휴대할 수 없습니다.");
                 step.objectId = selected.Id;
@@ -105,7 +106,7 @@ namespace ControlRoom
             return value == "DO_NOT_PICKUP" || value == "AVOID_GUARD" || value == "DO_NOT_OPEN" || value == "DO_NOT_DESTROY" ||
                 (!string.IsNullOrEmpty(value) && Regex.IsMatch(value, @"^LOCK_CODE:\d{3,8}$"));
         }
-        static string KindLabel(string kind) { return kind == "DOOR" ? "문" : kind == "CABINET" ? "보관함" : kind == "DESK" ? "책상" : "물체"; }
+        static string KindLabel(string kind) { return kind == "DOOR" ? "문" : kind == "CABINET" ? "보관함" : kind == "DESK" ? "책상" : kind == "TERMINAL" ? "터미널" : "물체"; }
         static void SyncTopLevel(Command command, List<CommandStep> steps)
         {
             if (command.sequence.Count == 0) command.sequence = steps;

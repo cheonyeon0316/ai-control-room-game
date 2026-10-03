@@ -343,7 +343,7 @@ namespace ControlRoom
             if (viewingHelp)
             {
                 sectionTitle.text = "FACILITY / COMMAND REFERENCE";
-                sourceText.text = "출입구 → 메인 복도 → 연구실\n                    ↓\n                 창고 → 서버실\n\n현장 요원\n이동 / 대기 / 조사 / 획득 / 열기\n숨기 / 사진 / 주변 보고\n예: 메인 복도로 이동해\n예: 주변 상황을 보고해\n예: 5초 동안 대기해\n\n분석 시스템\n출입 기록 / 문서 / 근거 / 충돌 자료\n예: 22시 이후 연구실 출입자 찾아줘\n예: USB 위치를 알려줘\n예: 이 정보의 근거를 보여줘\n\n분석 결과는 작전 기록과 증거 자료에서 확인할 수 있습니다.\n\n현재 해석기: " + (game.Commands.UseLlm ? "외부 LLM" : "오프라인 규칙 해석기");
+                sourceText.text = "출입구 → 메인 복도 → 연구실\n                    ↓\n                 창고 → 서버실\n\n현장 요원\n이동 / 대기 / 조사 / 획득 / 열기\n숨기 / 사진 / 주변 보고\n부정된 이동과 미지원 조건은 실행하지 않습니다.\n터미널 OPEN은 안내 화면만 엽니다.\nPURGE 삭제는 '삭제 확정'을 한 번 더 입력해야 합니다.\n예: 메인 복도로 이동해\n예: 주변 상황을 보고해\n예: 5초 동안 대기해\n\n분석 시스템\n출입 기록 / 문서 / 근거 / 충돌 자료\n예: 22시 이후 연구실 출입자 찾아줘\n예: USB 위치를 알려줘\n예: 이 정보의 근거를 보여줘\n\n분석 결과는 작전 기록과 증거 자료에서 확인할 수 있습니다.\n\n현재 해석기: " + (game.Commands.UseLlm ? "외부 LLM" : "오프라인 규칙 해석기");
                 return;
             }
             if (viewingEvidence)

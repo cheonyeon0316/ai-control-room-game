@@ -1654,3 +1654,24 @@ batchmode의 `ScreenCapture.CaptureScreenshot`은 실제 HUD PNG를 남기지 �
 최종 실행 `20261002-233403`의 EditMode 87/87, PlayMode 18/18, Windows 빌드/실행 초기화가 모두 통과했다. 타이머 mesh 생성과 실제 PNG의 `09:58` 표시를 확인했다. 최종 WebGL 빌드도 성공했다. 공개 Pages의 브라우저에서 시작 → 한국어 `메인 복도로 이동해` → 실제 요원 도착 → `22시 이후 연구실 출입자 찾아줘` → 출처·시간이 포함된 3건의 분석 응답을 확인했고 브라우저 Console error/warning은 0이었다.
 
 공개 결과: https://cheonyeon0316.github.io/ai-control-room-game/ · 저장소: https://github.com/cheonyeon0316/ai-control-room-game · Windows Release: `v0.1.0`. 업로드된 ZIP의 GitHub SHA256 digest와 로컬 파일의 해시가 일치한다. 전체 105개 자동 검사는 Unity Editor에서 실행했고, 웹 전체 미션 완주·실물 한글 IME 조합·사람의 재미 평가는 별도 범위로 남긴다.
+
+## 2026-10-03 기획개발 개선 요청
+
+기준: 사용자 제공 `AI_Control_Room_기획개발_개선요청서.docx`. 원본 SPEC과 v0.1.0 공개 릴리스는 이력으로 보존하고, 이번 적용은 P0 명령 해석·터미널 증거 보호와 배포 검증 기록에 한정한다.
+
+- [완료] R01 — 부정·미지원 조건문을 보수적으로 해석한다. 부정된 이동은 실행하지 않고, 현장 요원이 확인할 수 없는 조건이 들어간 명령은 거절한다. 지원하는 `GUARD_CLEAR`와 "가져오지 말고 주변 보고"는 기존 순서/제한 의미를 보존한다.
+- [완료] R02 — 터미널 `OPEN`은 안내 화면을 제공하고 증거를 보존한다. `PURGE`는 터미널 전용 동작이며, 같은 명령을 제출한 뒤 별도의 정확한 삭제 확인을 받아야 실행한다. 취소·새 명령은 대기 중인 삭제를 취소하고, 최종 파괴 기록에는 대상과 원인을 남긴다.
+- [완료] R03 자동 검증 — EditMode 97/97, PlayMode 19/19, Windows 빌드·초기화, WebGL 빌드 PASS. 공개 Pages smoke와 물리 키보드·마우스/IME 및 전체 Windows 사람 플레이는 별도 검증 대상으로 유지한다.
+- [진행] 공개 저장소 `main`과 Pages에 v0.1.1 결과를 반영하고, 기존 v0.1.0 태그·릴리스는 보존한다.
+
+R01/R02의 세부 판정은 회귀 사례와 함께 아래 실행 이력 및 `ACCEPTANCE.md`에 업데이트한다. 문서 렌더 도구는 이 환경에 포함된 LibreOffice 부재로 PNG 검토가 불가능했다. DOCX의 문단·표 텍스트는 모두 추출해 요구를 대조했으며 원본 문서는 수정하지 않았다.
+
+### 수용 검사 루프 1
+
+실행 `20261003-173618`은 EditMode **96개 중 95개 통과 / 실패 1개**다. PURGE 대상이 현재 방과 다를 때 Validator는 generic target을 방별 후보로 먼저 제한하므로 `OUT_OF_REACH`가 아니라 `OBJECT_NOT_IN_LOCATION`을 반환한다. PURGE 거절 및 상태 보존은 이미 맞게 동작했으므로, 테스트의 기대 분류를 실제 validator 계약에 맞춰 수정하고 전체 검사를 반복한다.
+
+### 수용 검사 루프 2
+
+실행 `20261003-173749`은 EditMode **96/96 통과**, PlayMode **19개 중 17개 통과 / 실패 2개**다. `동안 대기`의 `안`을 부정으로 오인한 파서 경계와 혼합 문장 `터미널 PURGE`의 목적어 선택 누락을 확인했다. `안` 앞 한글 경계를 제한하고 PURGE의 목적어 위치 fallback을 추가했으며 두 사례를 EditMode/PlayMode 회귀 기준에 포함해 다시 실행한다.
+
+최종 실행 `20261003-174042`에서 EditMode **97/97**, PlayMode **19/19**(실패·skip·inconclusive 0), Windows 빌드 및 실제 player 시작 초기화가 통과했다. WebGL 빌드도 생성됐다. `web/assets/acceptance.json`은 이번 Unity XML의 정확한 test case 이름/상태/개수로 다시 생성한다. 물리 입력과 전체 Windows 사람 플레이는 실행하지 않았으므로 PASS로 표시하지 않는다.

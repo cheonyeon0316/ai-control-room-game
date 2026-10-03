@@ -54,7 +54,7 @@ namespace ControlRoom
             World.Agent.EvidenceTimestamp = () => MissionTimestamp.ToString("yyyy-MM-dd HH:mm:ss");
             World.Agent.OnUsbAcquired = () => Rules.AcquireUsb();
             World.Agent.OnExitReached = () => Rules.ReachExit();
-            World.Agent.OnEvidenceDestroyed = () => Rules.DestroyCriticalEvidence();
+            World.Agent.OnEvidenceDestroyed = (targetId, cause) => Rules.DestroyCriticalEvidence(targetId, cause);
             World.Agent.OnRisk = amount => Risk.Add(amount);
             World.Agent.OnEvidence = record => Evidence.AddRange(new[] { record });
             World.Guard.CanAct = () => CanAct;

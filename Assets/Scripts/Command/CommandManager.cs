@@ -25,6 +25,8 @@ namespace ControlRoom
         private Command activeFieldCommand, activeAnalysisCommand;
         private string activeFieldPrompt, activeAnalysisPrompt;
         private int activeFieldClarifications;
+        private Command pendingPurgeCommand;
+        private string pendingPurgePrompt = "";
         public void Initialize(GameManager owner) { game = owner; }
 
         public void Submit(string prompt, CommandTarget target)
@@ -35,7 +37,22 @@ namespace ControlRoom
             OnHistory?.Invoke((target == CommandTarget.FIELD_AGENT ? "FIELD" : "ANALYSIS") + " > " + prompt);
             if ((target == CommandTarget.FIELD_AGENT && IsFieldProcessing) || (target == CommandTarget.ANALYSIS_SYSTEM && IsAnalysisProcessing))
             { Respond(CommandStatus.FAILED, "담당자가 작업 중입니다. 완료 응답을 기다려 주세요."); return; }
+            if (pendingPurgeCommand != null)
+            {
+                if (target == CommandTarget.FIELD_AGENT && IsPurgeConfirmation(prompt))
+                { ConfirmPendingPurge(); return; }
+                if (target == CommandTarget.FIELD_AGENT && IsPurgeCancellation(prompt))
+                { CancelPendingPurge("PURGE를 취소했습니다. 증거는 보존되었습니다."); return; }
+                CancelPendingPurge("새 명령이 접수되어 대기 중인 PURGE를 취소했습니다. 증거는 보존되었습니다.");
+            }
             Respond(CommandStatus.RECEIVED, "명령 수신.");
+            string safetyError = RuleCommandParser.ValidateNaturalLanguageSafety(prompt, target);
+            if (!string.IsNullOrEmpty(safetyError))
+            {
+                Respond(CommandStatus.FAILED, safetyError);
+                game.Journal.Record(prompt, null, CommandStatus.FAILED, safetyError, 0, false, requestTarget: target);
+                return;
+            }
             if (target == CommandTarget.FIELD_AGENT && Clarification.Pending != null)
             {
                 clarificationCount++;
@@ -43,7 +60,7 @@ namespace ControlRoom
                 HandleValidated(resolved, prompt);
                 return;
             }
-            if (UseLlm) StartCoroutine(InterpretExternal(prompt, target));
+            if (UseLlm && !prompt.TrimStart().StartsWith("{", StringComparison.Ordinal)) StartCoroutine(InterpretExternal(prompt, target));
             else HandleParsed(parser.Parse(prompt, target), prompt, target);
         }
 
@@ -105,10 +122,15 @@ namespace ControlRoom
             }
             LastCommand = result.command;
             Clarification.Clear();
+            if (ContainsPurge(result.command))
+            {
+                BeginPurgeConfirmation(result.command, prompt);
+                return;
+            }
             StartCoroutine(Execute(result.command, prompt));
         }
 
-        private IEnumerator Execute(Command command, string prompt)
+        private IEnumerator Execute(Command command, string prompt, bool purgeConfirmed = false)
         {
             IsFieldProcessing = true;
             int resolvedClarifications = clarificationCount;
@@ -154,6 +176,7 @@ namespace ControlRoom
                 }
                 var restrictions = new List<string>(command.restrictions);
                 if (command.conditions.Contains("GUARD_CLEAR") && !restrictions.Contains("AVOID_GUARD")) restrictions.Add("AVOID_GUARD");
+                if (purgeConfirmed && step.action == CommandAction.PURGE) restrictions.Add("PURGE_CONFIRMED");
                 yield return game.World.Agent.ExecuteStep(step, restrictions);
                 if (!game.World.Agent.LastSuccess) { succeeded = false; break; }
             }
@@ -225,6 +248,62 @@ namespace ControlRoom
             ClearRequest(CommandTarget.FIELD_AGENT); ClearRequest(CommandTarget.ANALYSIS_SYSTEM); clarificationCount = 0;
             Clarification.Clear();
             if (hadPending) Respond(CommandStatus.FAILED, reason);
+        }
+
+        private void BeginPurgeConfirmation(Command command, string prompt)
+        {
+            pendingPurgeCommand = CommandVocabulary.Clone(command);
+            pendingPurgePrompt = string.IsNullOrEmpty(command.prompt) ? prompt : command.prompt;
+            string message = "증거 보관 터미널의 감사 증거를 영구 삭제합니다. 삭제하려면 다음 입력에서 '삭제 확정'이라고 입력하세요. 취소하거나 새 명령을 입력하면 증거를 보존합니다.";
+            Respond(CommandStatus.NEEDS_CLARIFICATION, message);
+            game.Journal.Record(pendingPurgePrompt, pendingPurgeCommand, CommandStatus.NEEDS_CLARIFICATION, message, clarificationCount, false, requestTarget: CommandTarget.FIELD_AGENT);
+            clarificationCount = 0;
+        }
+
+        private void ConfirmPendingPurge()
+        {
+            Command command = pendingPurgeCommand;
+            string originalPrompt = pendingPurgePrompt;
+            pendingPurgeCommand = null;
+            pendingPurgePrompt = "";
+            ValidationResult validation = validator.Validate(command, game.World.GetContext());
+            if (!validation.valid)
+            {
+                Respond(CommandStatus.FAILED, "PURGE를 다시 확인할 수 없습니다. " + validation.message);
+                game.Journal.Record(originalPrompt, command, CommandStatus.FAILED, LastResponse, clarificationCount, false, requestTarget: CommandTarget.FIELD_AGENT);
+                clarificationCount = 0;
+                return;
+            }
+            LastCommand = validation.command;
+            StartCoroutine(Execute(validation.command, originalPrompt, purgeConfirmed: true));
+        }
+
+        private void CancelPendingPurge(string message)
+        {
+            Command command = pendingPurgeCommand;
+            string originalPrompt = pendingPurgePrompt;
+            pendingPurgeCommand = null;
+            pendingPurgePrompt = "";
+            Respond(CommandStatus.COMPLETED, message);
+            game.Journal.Record(originalPrompt, command, CommandStatus.COMPLETED, message, clarificationCount, false, requestTarget: CommandTarget.FIELD_AGENT);
+            clarificationCount = 0;
+        }
+
+        private static bool ContainsPurge(Command command)
+        {
+            foreach (CommandStep step in command.Steps)
+                if (step.action == CommandAction.PURGE) return true;
+            return false;
+        }
+
+        private static bool IsPurgeConfirmation(string prompt)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(prompt ?? "", @"^(?:삭제\s*확정|purge\s+confirm)$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        }
+
+        private static bool IsPurgeCancellation(string prompt)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(prompt ?? "", @"^(?:취소|cancel)$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
         }
     }
 }

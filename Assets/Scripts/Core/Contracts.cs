@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ControlRoom
 {
     public enum CommandTarget { FIELD_AGENT, ANALYSIS_SYSTEM }
-    public enum CommandAction { MOVE, WAIT, INSPECT, PICKUP, OPEN, HIDE, REPORT, PHOTO, ANALYZE }
+    public enum CommandAction { MOVE, WAIT, INSPECT, PICKUP, OPEN, PURGE, HIDE, REPORT, PHOTO, ANALYZE }
     public enum AgentState { Idle, Moving, Interacting, Waiting, Reporting, Hidden, Caught }
     public enum MissionState { Briefing, Playing, Success, Failure, Result }
     public enum CommandStatus { RECEIVED, PROCESSING, EXECUTING, COMPLETED, NEEDS_CLARIFICATION, FAILED }
